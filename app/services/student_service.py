@@ -1,0 +1,73 @@
+from sqlalchemy.orm import Session
+from app.models import Student
+from app.schemas import StudentCreate
+
+
+#  create student
+def create_student(db:Session, student_data: StudentCreate):
+
+    existing_email  = db.query(Student).filter(
+        Student.email == student_data.email).first()
+
+    if existing_email:
+
+        raise ValueError ("Email already registered")
+    
+    existing_phone = db.query(Student).filter(
+        Student.phone_number == student_data.phone_number).first()
+
+    if existing_phone:
+        
+        raise ValueError ("Phone number already used")
+
+    student = Student (
+
+        student_name = student_data.student_name,
+        email = student_data.email,
+        phone_number = student_data.phone_number,
+        gender = student_data.gender
+    )
+
+    db.add(student)
+
+    db.commit()
+
+    db.refresh(student)
+
+    return student
+
+
+#  get all student
+def get_all_students(db:Session):
+
+    return db.query(Student).all()
+
+
+#  select specific id to check student
+def get_student_by_id(db:Session, student_id: int):
+
+    student = db.query(Student).filter(
+        Student.id == student_id).first()
+
+    if not student:
+
+        raise ValueError ("No student found")
+    
+    return student
+
+
+# delete student
+def delete_student (db:Session, student_id: int):
+
+    student = db.query(Student).filter(
+        Student.id == student_id).first()
+
+    if not student:
+
+        return None
+    
+    db.delete(student)
+
+    db.commit()
+    
+    return student

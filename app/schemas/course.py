@@ -9,7 +9,7 @@ class CourseBase(BaseModel):
 
 # For creating a new Course (request body) 
 class CourseCreate(CourseBase):
-
+    
     pass 
 
 # For returning data from API (response)
