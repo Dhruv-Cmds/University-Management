@@ -1,3 +1,8 @@
+from .auth_service import (
+    login_user,
+    authenticate_user
+)
+
 from .course_service import (
     create_course, 
     get_all_courses, 
