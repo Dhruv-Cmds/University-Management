@@ -25,3 +25,8 @@ from .student_service import (
     get_student_by_id, 
     delete_student
 )
+
+from .user_service import (
+    create_user,
+    get_user_by_email
+)
