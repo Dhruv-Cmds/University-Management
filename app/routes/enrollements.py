@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from app.services import enrollment_service
 from app.schemas import EnrollmentCreate, EnrollmentResponse
 
-from app.dependencies import get_db
+from app.dependencies import get_db, require_role, get_current_user
+from app.models import UserRole
 
 router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
 
@@ -12,7 +13,8 @@ router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
 @router.post("/", response_model = EnrollmentResponse)
 def create_enrollment(
                 course: EnrollmentCreate,
-                db:Session = Depends(get_db)
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
             ):
 
     try:
@@ -24,7 +26,10 @@ def create_enrollment(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/", response_model= list[EnrollmentResponse])
-def get_all_enrollments(db:Session = Depends(get_db)):
+def get_all_enrollments(
+                        db:Session = Depends(get_db),
+                        current_user = Depends(get_current_user)
+                    ):
 
     try:
 
@@ -37,8 +42,9 @@ def get_all_enrollments(db:Session = Depends(get_db)):
 @router.get("/{enrollment_id}", response_model= EnrollmentResponse)
 def get_enrollment_by_id(
                     enrollment_id: int,
-                    db:Session = Depends(get_db)
-                    ):
+                    db:Session = Depends(get_db),
+                    current_user = Depends(get_current_user)
+                ):
 
     try:
 
@@ -51,8 +57,9 @@ def get_enrollment_by_id(
 @router.delete("/{enrollment_id}", response_model= EnrollmentResponse)
 def delete_enrollment(
                 enrollment_id: int,
-                db:Session = Depends(get_db)
-                ):
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
+            ):
      
     try:
 

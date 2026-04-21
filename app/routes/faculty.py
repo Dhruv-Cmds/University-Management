@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from app.services import faculty_service
 from app.schemas import FacultyCreate, FacultyResponse
 
-from app.dependencies import get_db
+from app.dependencies import get_db, require_role, get_current_user
+from app.models import UserRole
 
 router = APIRouter(prefix="/faculties", tags=["Faculties"])
 
@@ -12,7 +13,8 @@ router = APIRouter(prefix="/faculties", tags=["Faculties"])
 @router.post("/", response_model = FacultyResponse)
 def create_faculty(
                 faculty: FacultyCreate,
-                db:Session = Depends(get_db)
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
             ):
 
     try:
@@ -24,7 +26,10 @@ def create_faculty(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/", response_model= list[FacultyResponse])
-def get_all_faculties(db:Session = Depends(get_db)):
+def get_all_faculties(
+                    db:Session = Depends(get_db),
+                    current_user = Depends(get_current_user)
+                ):
 
     try:
 
@@ -37,8 +42,9 @@ def get_all_faculties(db:Session = Depends(get_db)):
 @router.get("/{faculty_id}", response_model= FacultyResponse)
 def get_faculty_by_id(
                     faculty_id: int,
-                    db:Session = Depends(get_db)
-                    ):
+                    db:Session = Depends(get_db),
+                    current_user = Depends(get_current_user)
+                ):
 
     try:
 
@@ -51,8 +57,9 @@ def get_faculty_by_id(
 @router.delete("/{faculty_id}", response_model= FacultyResponse)
 def delete_faculty(
                 faculty_id: int,
-                db:Session = Depends(get_db)
-                ):
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
+            ):
      
     try:
 

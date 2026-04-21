@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 from app.services import course_service
 from app.schemas import CourseCreate, CourseResponse
 
-from app.dependencies import get_db
+from app.dependencies import get_db, require_role, get_current_user
+
+from app.models import UserRole
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
@@ -12,7 +14,10 @@ router = APIRouter(prefix="/courses", tags=["Courses"])
 @router.post("/", response_model = CourseResponse)
 def create_course(
                 course: CourseCreate,
-                db:Session = Depends(get_db)
+                db:Session = Depends(get_db),
+                current_user = Depends(
+                    require_role([UserRole.admin, UserRole.faculty])
+                )
             ):
 
     try:
@@ -24,7 +29,10 @@ def create_course(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/", response_model= list[CourseResponse])
-def get_all_courses(db:Session = Depends(get_db)):
+def get_all_courses(
+                    db:Session = Depends(get_db),
+                    current_user = Depends(get_current_user)
+                ):
 
     try:
 
@@ -37,7 +45,8 @@ def get_all_courses(db:Session = Depends(get_db)):
 @router.get("/{course_id}", response_model= CourseResponse)
 def get_course_by_id(
                     course_id: int,
-                    db:Session = Depends(get_db)
+                    db:Session = Depends(get_db),
+                    current_user = Depends(get_current_user)
                     ):
 
     try:
@@ -51,7 +60,8 @@ def get_course_by_id(
 @router.delete("/{course_id}", response_model= CourseResponse)
 def delete_course(
                 course_id: int,
-                db:Session = Depends(get_db)
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
                 ):
      
     try:

@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 from app.services import student_service
 from app.schemas import StudentCreate, StudentResponse
 
-from app.dependencies import get_db
+from app.dependencies import get_db, require_role, get_current_user
+from app.models import UserRole
+
 
 router = APIRouter(prefix="/students", tags=["Students"])
 
@@ -12,7 +14,8 @@ router = APIRouter(prefix="/students", tags=["Students"])
 @router.post("/", response_model = StudentResponse)
 def create_student(
                 student: StudentCreate,
-                db:Session = Depends(get_db)
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
             ):
 
     try:
@@ -24,7 +27,10 @@ def create_student(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/", response_model= list[StudentResponse])
-def get_all_students(db:Session = Depends(get_db)):
+def get_all_students(
+                    db:Session = Depends(get_db),
+                    current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
+                ):
 
     try:
 
@@ -37,8 +43,9 @@ def get_all_students(db:Session = Depends(get_db)):
 @router.get("/{student_id}", response_model= StudentResponse)
 def get_student_by_id(
                     student_id: int,
-                    db:Session = Depends(get_db)
-                    ):
+                    db:Session = Depends(get_db),
+                    current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
+                ):
 
     try:
 
@@ -51,8 +58,9 @@ def get_student_by_id(
 @router.delete("/{student_id}", response_model= StudentResponse)
 def delete_student(
                 student_id: int,
-                db:Session = Depends(get_db)
-                ):
+                db:Session = Depends(get_db),
+                current_user = Depends(require_role([UserRole.admin]))
+            ):
      
     try:
 
