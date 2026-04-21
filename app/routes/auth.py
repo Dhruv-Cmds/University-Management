@@ -18,6 +18,7 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
         )
 
     except ValueError as e:
+        
         raise HTTPException(status_code=401, detail=str(e))
     
 

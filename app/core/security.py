@@ -1,14 +1,13 @@
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 
 import os 
 
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 
-dotenv_values()
-
+load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
@@ -16,7 +15,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 # Safety check
 if not SECRET_KEY:
-    raise HTTPException(status_code="SECRET_KEY is not set in environment variable")
+    raise HTTPException(status_code=500, detail="SECRET_KEY is not set in environment variable")
 
 #  Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -24,7 +23,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # hashed password
 def hash_password(password: str):
 
-    return pwd_context.has(password)
+    return pwd_context.hash(password)
 
 # verify password
 def verify_password(plain_password: str, hashed_password: str):
@@ -37,7 +36,7 @@ def create_access_token(data: dict): # user info come in json (dict) formate
     to_encode = data.copy()
 
     #  decide when to expire user token
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     # Add standard JWT fields
     to_encode.update({"exp": expire})  #  user expire time 
