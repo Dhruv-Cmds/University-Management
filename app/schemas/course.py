@@ -5,7 +5,7 @@ from app.schemas import CourseStr
 # Shared base (reusable fields)
 class CourseBase(BaseModel):
     
-    course_name = CourseStr
+    course_name: CourseStr
 
 # For creating a new Course (request body) 
 class CourseCreate(CourseBase):
