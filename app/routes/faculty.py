@@ -6,7 +6,7 @@ from app.schemas import FacultyCreate, FacultyResponse
 
 from app.dependencies import get_db
 
-router = APIRouter(prefix="/faculty", tags=["Faculty"])
+router = APIRouter(prefix="/faculty", tags=["Faculties"])
 
 # only what’s in FacultyResponse is returned.
 @router.post("/", response_model = FacultyResponse)

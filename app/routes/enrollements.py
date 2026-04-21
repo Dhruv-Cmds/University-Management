@@ -6,7 +6,7 @@ from app.schemas import EnrollmentCreate, EnrollmentResponse
 
 from app.dependencies import get_db
 
-router = APIRouter(prefix="/enrollment", tags=["Enrollment"])
+router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
 
 # only what’s in EnrollmentResponse is returned.
 @router.post("/", response_model = EnrollmentResponse)
