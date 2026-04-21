@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>University Dashboard</h1>
+
+    <div id="message" class="message"></div>
+
+    <div class="grid">
+
+        <!-- AUTH -->
+        <div class="card">
+            <h2>Auth</h2>
+            <input id="email" placeholder="Email">
+            <input id="password" type="password" placeholder="Password">
+
+            <select id="role">
+                <option value="admin">Admin</option>
+                <option value="faculty">Faculty</option>
+                <option value="student">Student</option>
+            </select>
+
+            <button onclick="signup()">Signup</button>
+            <button class="secondary" onclick="login()">Login</button>
+        </div>
+
+        <!-- COURSE -->
+        <div class="card">
+            <h2>Course</h2>
+            <input id="course_name" placeholder="Course Name">
+            <button onclick="createCourse()">Create Course</button>
+        </div>
+
+        <!-- STUDENT -->
+        <div class="card">
+            <h2>Student</h2>
+            <input id="student_name" placeholder="Name">
+            <input id="student_email" placeholder="Email">
+            <input id="phone" placeholder="Phone">
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="createStudent()">Create Student</button>
+        </div>
+
+        <!-- FACULTY -->
+        <div class="card">
+            <h2>Faculty</h2>
+            <input id="faculty_name" placeholder="Name">
+            <input id="faculty_email" placeholder="Email">
+            <input id="faculty_phone" placeholder="Phone">
+            <select id="faculty_gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="createFaculty()">Create Faculty</button>
+        </div>
+
+        <!-- ENROLL -->
+        <div class="card">
+            <h2>Enrollment</h2>
+            <p>Uses last created Student & Course</p>
+            <button onclick="enroll()">Enroll</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

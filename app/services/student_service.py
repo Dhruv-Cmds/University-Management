@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import Student
+from app.models import Student, User, Faculty
 from app.schemas import StudentCreate
-
 
 #  create student
 def create_student(db:Session, student_data: StudentCreate):
@@ -15,10 +14,20 @@ def create_student(db:Session, student_data: StudentCreate):
     
     existing_phone = db.query(Student).filter(
         Student.phone_number == student_data.phone_number).first()
+    
+    existing_phone_faculty = db.query(Faculty)\
+    .filter(Faculty.phone_number == student_data.phone_number)\
+    .first()
 
-    if existing_phone:
+    if existing_phone_faculty or existing_phone:
         
         raise ValueError ("Phone number already used")
+    
+    existing_user = db.query(User).filter(User.email == student_data.email).first()
+
+    if existing_user:
+        raise ValueError("Email already used by a user")
+    
 
     student = Student (
 
