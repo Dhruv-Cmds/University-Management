@@ -1,0 +1,63 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from app.services import course_service
+from app.schemas import CourseCreate, CourseResponse
+
+from app.dependencies import get_db
+
+router = APIRouter(prefix="/courses", tags=["Courses"])
+
+# only what’s in CourseResponse is returned.
+@router.post("/", response_model = CourseResponse)
+def create_course(
+                course: CourseCreate,
+                db:Session = Depends(get_db)
+            ):
+
+    try:
+        # create_course not belongs to this function it's belongs to sevice folder
+        return course_service.create_course(db, course)
+    
+    except ValueError as e:
+
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/", response_model= list[CourseResponse])
+def get_all_courses(db:Session = Depends(get_db)):
+
+    try:
+
+        return course_service.get_all_courses(db)
+    
+    except ValueError as e:
+
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/{course_id}", response_model= CourseResponse)
+def get_course_by_id(
+                    course_id: int,
+                    db:Session = Depends(get_db)
+                    ):
+
+    try:
+
+        return course_service.get_course_by_id(db, course_id)
+    
+    except ValueError as e:
+
+        raise HTTPException (status_code=404, detail= str(e))
+    
+@router.delete("/{course_id}", response_model= CourseResponse)
+def delete_course(
+                course_id: int,
+                db:Session = Depends(get_db)
+                ):
+     
+    try:
+
+        return course_service.delete_course(db, course_id)
+    
+    except ValueError as e:
+
+        raise HTTPException (status_code=404, detail= str(e))
