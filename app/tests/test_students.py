@@ -12,26 +12,19 @@ def get_token():
     return res.json()["access_token"]
 
 
-def test_create_course():
+def test_create_student():
     token = get_token()
 
     response = client.post(
-        "/courses/",
-        json={"course_name": "Physics"},
+        "/students/",
+        json={
+            "student_name": "John",
+            "email": "john@test.com",
+            "phone_number": "1234567890",
+            "gender": "male"
+        },
         headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
-    assert response.json()["course_name"] == "Physics"
-
-
-def test_get_courses():
-    token = get_token()
-
-    response = client.get(
-        "/courses/",
-        headers={"Authorization": f"Bearer {token}"}
-    )
-
-    assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    assert response.json()["student_name"] == "John"
