@@ -6,7 +6,7 @@ from app.schemas import StudentCreate, StudentResponse
 
 from app.dependencies import get_db
 
-router = APIRouter(prefix="/student", tags=["Students"])
+router = APIRouter(prefix="/students", tags=["Students"])
 
 # only what’s in StudentResponse is returned.
 @router.post("/", response_model = StudentResponse)
