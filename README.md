@@ -16,6 +16,49 @@ A fully functional backend system built with **FastAPI**, featuring authenticati
 * 🗄️ MySQL Database with SQLAlchemy ORM
 
 ---
+## 🌐 Frontend (Basic Dashboard)
+
+A simple frontend is included using **HTML, CSS, and JavaScript** to interact with the API.
+
+### Features
+
+* 🔐 Signup & Login
+* 📚 Create Courses
+* 👨‍🎓 Create Students
+* 👩‍🏫 Create Faculty
+* 🔗 Enrollment system
+* 🛡️ Role-based access control (via backend)
+
+### Notes
+
+* This frontend is a **basic testing dashboard**, not a production UI.
+* It helps visualize API interactions without tools like Postman.
+* UI/UX improvements and React migration are planned.
+
+---
+
+## ▶️ Running Frontend
+
+1. Start backend server:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+2. Open:
+
+```text
+frontend/index.html
+```
+
+---
+
+## ⚠️ Security Note
+
+* Role selection is handled **only by backend**
+* Frontend does NOT control permissions
+* JWT tokens are required for protected routes
+
 
 ## 🏗️ Tech Stack
 
@@ -179,7 +222,6 @@ python -m pytest -v
 ---
 
 ## 📌 Future Improvements
-* 🌐 Frontend integration
 * ☁️ Deployment (Render / Railway)
 ---
 
