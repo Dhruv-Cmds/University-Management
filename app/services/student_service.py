@@ -27,7 +27,7 @@ def create_student(db:Session, student_data: StudentCreate):
         raise ValueError("Email already used by a user")
     
 
-    student = Student (
+    new_student = Student (
 
         student_name = student_data.student_name,
         email = student_data.email,
@@ -37,11 +37,11 @@ def create_student(db:Session, student_data: StudentCreate):
 
     try:
 
-        db.add(student)
+        db.add(new_student)
 
         db.commit()
 
-        db.refresh(student)
+        db.refresh(new_student)
     
     except Exception as e:
 
@@ -49,7 +49,7 @@ def create_student(db:Session, student_data: StudentCreate):
 
         raise e
 
-    return student
+    return new_student
 
 
 #  get all student

@@ -26,7 +26,7 @@ def create_faculty(db:Session, faculty_data: FacultyCreate):
     if existing_user:
         raise ValueError("Email already used by a user")
 
-    faculty = Faculty (
+    new_faculty = Faculty (
 
         faculty_name = faculty_data.faculty_name,
         email = faculty_data.email,
@@ -36,18 +36,18 @@ def create_faculty(db:Session, faculty_data: FacultyCreate):
 
     try:
 
-        db.add(faculty)
+        db.add(new_faculty)
 
         db.commit()
 
-        db.refresh(faculty)
+        db.refresh(new_faculty)
 
     except Exception as e:
 
         db.rollback()
         raise e
 
-    return faculty
+    return new_faculty
 
 
 #  get all student

@@ -13,7 +13,7 @@ def create_user(db: Session, user_data: UserCreate):
     if existing:
         raise ValueError("Email already registered")
 
-    user = User(
+    new_user = User(
         email=user_data.email,
         password=hash_password(user_data.password),
         role=user_data.role
@@ -21,7 +21,49 @@ def create_user(db: Session, user_data: UserCreate):
 
     try:
 
-        db.add(user)
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+    except Exception as e:
+
+        db.rollback()
+        raise e
+        
+    return new_user
+
+
+def get_user_by_email(db: Session, email: str):
+
+    user = db.query(User).filter(User.email == email).first()
+
+    if not user:
+
+        raise ValueError ("User not found")
+    
+    return user
+
+def get_user_by_id (db: Session, user_id: int):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+
+        raise ValueError ("User not found")
+    
+    return user
+
+def delete_user_by_id(db: Session, user_id: int):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+
+        raise ValueError ("User not found")
+    
+    try:
+
+        db.delete(user)
         db.commit()
         db.refresh(user)
 
@@ -29,9 +71,5 @@ def create_user(db: Session, user_data: UserCreate):
 
         db.rollback()
         raise e
-        
+    
     return user
-
-
-def get_user_by_email(db: Session, email: str):
-    return db.query(User).filter(User.email == email).first()

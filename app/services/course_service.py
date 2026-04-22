@@ -12,22 +12,22 @@ def create_course(db:Session, course_data: CourseCreate):
 
         raise ValueError ("Course already exists")
 
-    course = Course(
+    new_course = Course(
         course_name = course_data.course_name
     )
 
     try:
 
-        db.add(course)
+        db.add(new_course)
         db.commit()
-        db.refresh(course)
+        db.refresh(new_course)
 
     except Exception as e:
 
         db.rollback()
         raise e
 
-    return course
+    return new_course
 
 #  get all courses
 def get_all_courses(db:Session):

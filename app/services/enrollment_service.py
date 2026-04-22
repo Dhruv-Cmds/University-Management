@@ -15,27 +15,27 @@ def create_enrollment(
 
     if existing:
 
-         raise ValueError("Student already enrolled in this course")
+        raise ValueError("Student has already submitted data and is enrolled in this course.")
     
-    enrollment = Enrollment (
+    new_enrollment = Enrollment (
         student_id = enrollment_data.student_id,
         course_id = enrollment_data.course_id
     )
 
     try:
 
-        db.add(enrollment)
+        db.add(new_enrollment)
 
         db.commit()
 
-        db.refresh(enrollment)
+        db.refresh(new_enrollment)
 
     except Exception as e:
 
         db.rollback()
         raise e
 
-    return enrollment
+    return new_enrollment
     
 
 #  get all enrollment
