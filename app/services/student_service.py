@@ -73,7 +73,7 @@ def delete_student (db:Session, student_id: int):
 
     if not student:
 
-        return None
+        raise ValueError ("No student found")
     
     db.delete(student)
 

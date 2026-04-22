@@ -43,7 +43,7 @@ def delete_course(db:Session, course_id: int):
     course = db.query(Course).filter(Course.id == course_id).first()
 
     if not course:
-        return None
+        raise ValueError ("Course not found")
     
     db.delete(course)
 

@@ -63,7 +63,7 @@ def delete_enrollment(
 
    if not enrollment:
        
-       return None
+       raise ValueError ("Enrollment not found")
    
    db.delete(enrollment)
 

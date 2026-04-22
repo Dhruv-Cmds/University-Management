@@ -6,7 +6,7 @@ from app.schemas import FacultyCreate
 def create_faculty(db:Session, faculty_data: FacultyCreate):
 
     existing_email  = db.query(Faculty).filter(
-        Faculty.email == faculty_data.email).first()
+        Faculty.email == faculty_data.email,).first()
 
     if existing_email:
 
@@ -70,7 +70,7 @@ def delete_faculty (db:Session, faculty_id: int):
 
     if not faculty:
 
-        return None
+        raise ValueError ("No student found")
     
     db.delete(faculty)
 
