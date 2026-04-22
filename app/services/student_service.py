@@ -6,8 +6,8 @@ from app.schemas import StudentCreate
 def create_student(db:Session, student_data: StudentCreate):
 
     existing_email_phone  = db.query(Student).filter(
-        Student.email == student_data.email |
-        Student.phone_number == student_data.phone_number).first()
+        (Student.email == student_data.email) |
+        (Student.phone_number == student_data.phone_number)).first()
 
     if existing_email_phone:
 

@@ -10,8 +10,8 @@ def create_enrollment(
                     ):
     
     existing = db.query(Enrollment).filter(
-            Enrollment.student_id == enrollment_data.student_id |
-            Enrollment.course_id == enrollment_data.course_id).first()
+            (Enrollment.student_id == enrollment_data.student_id) |
+            (Enrollment.course_id == enrollment_data.course_id)).first()
 
     if existing:
 

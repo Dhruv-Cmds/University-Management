@@ -6,8 +6,8 @@ from app.schemas import FacultyCreate
 def create_faculty(db:Session, faculty_data: FacultyCreate):
 
     existing_email_phone  = db.query(Faculty).filter(
-        Faculty.email == faculty_data.email |
-        Faculty.phone_number == faculty_data.phone_number).first()
+        (Faculty.email == faculty_data.email) |
+        (Faculty.phone_number == faculty_data.phone_number)).first()
 
     if existing_email_phone:
 
