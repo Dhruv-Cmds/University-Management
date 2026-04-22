@@ -5,21 +5,19 @@ from app.schemas import FacultyCreate
 #  create student
 def create_faculty(db:Session, faculty_data: FacultyCreate):
 
-    existing_email  = db.query(Faculty).filter(
-        Faculty.email == faculty_data.email,).first()
+    existing_email_phone  = db.query(Faculty).filter(
+        Faculty.email == faculty_data.email |
+        Faculty.phone_number == faculty_data.phone_number).first()
 
-    if existing_email:
+    if existing_email_phone:
 
         raise ValueError ("Email already registered")
-    
-    existing_phone = db.query(Faculty).filter(
-        Faculty.phone_number == faculty_data.phone_number).first()
     
     existing_phone_student = db.query(Student)\
     .filter(Student.phone_number == faculty_data.phone_number)\
     .first()
 
-    if existing_phone_student or existing_phone:
+    if existing_phone_student:
         
         raise ValueError ("Phone number already used")
     
@@ -36,11 +34,18 @@ def create_faculty(db:Session, faculty_data: FacultyCreate):
         gender = faculty_data.gender
     )
 
-    db.add(faculty)
+    try:
 
-    db.commit()
+        db.add(faculty)
 
-    db.refresh(faculty)
+        db.commit()
+
+        db.refresh(faculty)
+
+    except Exception as e:
+
+        db.rollback()
+        raise e
 
     return faculty
 
@@ -72,8 +77,15 @@ def delete_faculty (db:Session, faculty_id: int):
 
         raise ValueError ("No student found")
     
-    db.delete(faculty)
+    try:
+    
+        db.delete(faculty)
 
-    db.commit()
+        db.commit()
+
+    except Exception as e:
+        
+        db.rollback()
+        raise e
     
     return faculty

@@ -16,9 +16,16 @@ def create_course(db:Session, course_data: CourseCreate):
         course_name = course_data.course_name
     )
 
-    db.add(course)
-    db.commit()
-    db.refresh(course)
+    try:
+
+        db.add(course)
+        db.commit()
+        db.refresh(course)
+
+    except Exception as e:
+
+        db.rollback()
+        raise e
 
     return course
 
@@ -45,8 +52,15 @@ def delete_course(db:Session, course_id: int):
     if not course:
         raise ValueError ("Course not found")
     
-    db.delete(course)
+    try:
+    
+        db.delete(course)
 
-    db.commit()
+        db.commit()
+
+    except Exception as e:
+        
+        db.rollback()
+        raise e
 
     return course

@@ -10,7 +10,7 @@ def create_enrollment(
                     ):
     
     existing = db.query(Enrollment).filter(
-            Enrollment.student_id == enrollment_data.student_id,
+            Enrollment.student_id == enrollment_data.student_id |
             Enrollment.course_id == enrollment_data.course_id).first()
 
     if existing:
@@ -22,11 +22,18 @@ def create_enrollment(
         course_id = enrollment_data.course_id
     )
 
-    db.add(enrollment)
+    try:
 
-    db.commit()
+        db.add(enrollment)
 
-    db.refresh(enrollment)
+        db.commit()
+
+        db.refresh(enrollment)
+
+    except Exception as e:
+
+        db.rollback()
+        raise e
 
     return enrollment
     
@@ -65,8 +72,14 @@ def delete_enrollment(
        
        raise ValueError ("Enrollment not found")
    
-   db.delete(enrollment)
+   try:
+        db.delete(enrollment)
 
-   db.commit()
+        db.commit()
+
+   except Exception as e:
+       
+       db.rollback()
+       raise e
 
    return enrollment

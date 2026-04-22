@@ -19,10 +19,17 @@ def create_user(db: Session, user_data: UserCreate):
         role=user_data.role
     )
 
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    try:
 
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    except Exception as e:
+
+        db.rollback()
+        raise e
+        
     return user
 
 

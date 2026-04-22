@@ -5,23 +5,21 @@ from app.schemas import StudentCreate
 #  create student
 def create_student(db:Session, student_data: StudentCreate):
 
-    existing_email  = db.query(Student).filter(
-        Student.email == student_data.email).first()
-
-    if existing_email:
-
-        raise ValueError ("Email already registered")
-    
-    existing_phone = db.query(Student).filter(
+    existing_email_phone  = db.query(Student).filter(
+        Student.email == student_data.email |
         Student.phone_number == student_data.phone_number).first()
-    
-    existing_phone_faculty = db.query(Faculty)\
+
+    if existing_email_phone:
+
+        raise ValueError("Student with this email or phone already exists")
+
+    existing_faculty = db.query(Faculty)\
     .filter(Faculty.phone_number == student_data.phone_number)\
     .first()
 
-    if existing_phone_faculty or existing_phone:
+    if existing_faculty:
         
-        raise ValueError ("Phone number already used")
+        raise ValueError("Phone number already used by faculty")
     
     existing_user = db.query(User).filter(User.email == student_data.email).first()
 
@@ -37,11 +35,19 @@ def create_student(db:Session, student_data: StudentCreate):
         gender = student_data.gender
     )
 
-    db.add(student)
+    try:
 
-    db.commit()
+        db.add(student)
 
-    db.refresh(student)
+        db.commit()
+
+        db.refresh(student)
+    
+    except Exception as e:
+
+        db.rollback()
+
+        raise e
 
     return student
 
@@ -75,8 +81,16 @@ def delete_student (db:Session, student_id: int):
 
         raise ValueError ("No student found")
     
-    db.delete(student)
 
-    db.commit()
+    try:
     
+        db.delete(student)
+
+        db.commit()
+    
+    except Exception as e:
+
+        db.rollback()
+        raise e
+
     return student
