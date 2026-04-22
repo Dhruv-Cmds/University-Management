@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.services import student_service
 from app.schemas import StudentCreate, StudentResponse
 
-from app.dependencies import get_db, require_role, get_current_user
+from app.dependencies import get_db, require_role
 from app.models import UserRole
 
 
