@@ -1,7 +1,8 @@
 from .common import (
     NameStr, 
     PhoneStr, 
-    CourseStr
+    CourseStr,
+    PasswordStr
 )
 from .course import (
     CourseBase, 
@@ -27,10 +28,9 @@ from .student import (
     StudentResponse
 )
 
-from .user import (
-    UserBase, 
-    UserCreate, 
-    UserResponse, 
-    UserRole, 
-    UserLogin
+from .admin import (
+    AdminBase, 
+    AdminCreate, 
+    AdminResponse, 
+    AdminLogin
 )

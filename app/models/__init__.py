@@ -3,4 +3,4 @@ from .enrollment import Enrollment
 from .enum import GenderEnum
 from .faculty import Faculty
 from .student import Student
-from .user import User, UserRole
+from .admin import Admin, AdminRole

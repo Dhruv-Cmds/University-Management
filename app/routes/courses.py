@@ -4,9 +4,8 @@ from sqlalchemy.orm import Session
 from app.services import course_service
 from app.schemas import CourseCreate, CourseResponse
 
-from app.dependencies import get_db, require_role, get_current_user
-
-from app.models import UserRole
+from app.dependencies import get_db, require_role
+from app.models import AdminRole
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
@@ -16,7 +15,7 @@ def create_course(
                 course: CourseCreate,
                 db:Session = Depends(get_db),
                 current_user = Depends(
-                    require_role([UserRole.admin, UserRole.faculty])
+                    require_role([AdminRole.admin, AdminRole.faculty])
                 )
             ):
 
@@ -31,7 +30,7 @@ def create_course(
 @router.get("/", response_model= list[CourseResponse])
 def get_all_courses(
                     db:Session = Depends(get_db),
-                    current_user = Depends(get_current_user)
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -46,7 +45,7 @@ def get_all_courses(
 def get_course_by_id(
                     course_id: int,
                     db:Session = Depends(get_db),
-                    current_user = Depends(get_current_user)
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                     ):
 
     try:
@@ -61,7 +60,7 @@ def get_course_by_id(
 def delete_course(
                 course_id: int,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin]))
                 ):
      
     try:

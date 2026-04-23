@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from app.services import faculty_service
 from app.schemas import FacultyCreate, FacultyResponse
 
-from app.dependencies import get_db, require_role, get_current_user
-from app.models import UserRole
+from app.dependencies import get_db, require_role
+from app.models import AdminRole
 
 router = APIRouter(prefix="/faculties", tags=["Faculties"])
 
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/faculties", tags=["Faculties"])
 def create_faculty(
                 faculty: FacultyCreate,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin]))
             ):
 
     try:
@@ -28,7 +28,7 @@ def create_faculty(
 @router.get("/", response_model= list[FacultyResponse])
 def get_all_faculties(
                     db:Session = Depends(get_db),
-                    current_user = Depends(get_current_user)
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -43,7 +43,7 @@ def get_all_faculties(
 def get_faculty_by_id(
                     faculty_id: int,
                     db:Session = Depends(get_db),
-                    current_user = Depends(get_current_user)
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -58,7 +58,7 @@ def get_faculty_by_id(
 def delete_faculty(
                 faculty_id: int,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin]))
             ):
      
     try:

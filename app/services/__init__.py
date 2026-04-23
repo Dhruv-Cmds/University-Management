@@ -1,6 +1,6 @@
 from .auth_service import (
-    login_user,
-    authenticate_user
+    login_admin,
+    authenticate_admin
 )
 
 from .course_service import (
@@ -31,7 +31,9 @@ from .student_service import (
     delete_student
 )
 
-from .user_service import (
-    create_user,
-    get_user_by_email
+from .admin_service import (
+    create_admin,
+    get_all_admin,
+    get_admin_by_id,
+    delete_admin_by_id
 )

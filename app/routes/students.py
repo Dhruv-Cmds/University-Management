@@ -5,7 +5,7 @@ from app.services import student_service
 from app.schemas import StudentCreate, StudentResponse
 
 from app.dependencies import get_db, require_role
-from app.models import UserRole
+from app.models import AdminRole
 
 
 router = APIRouter(prefix="/students", tags=["Students"])
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/students", tags=["Students"])
 def create_student(
                 student: StudentCreate,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin]))
             ):
 
     try:
@@ -29,7 +29,7 @@ def create_student(
 @router.get("/", response_model= list[StudentResponse])
 def get_all_students(
                     db:Session = Depends(get_db),
-                    current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -44,7 +44,7 @@ def get_all_students(
 def get_student_by_id(
                     student_id: int,
                     db:Session = Depends(get_db),
-                    current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -59,7 +59,7 @@ def get_student_by_id(
 def delete_student(
                 student_id: int,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin]))
             ):
      
     try:

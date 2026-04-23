@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from app.services import enrollment_service
 from app.schemas import EnrollmentCreate, EnrollmentResponse
 
-from app.dependencies import get_db, require_role, get_current_user
-from app.models import UserRole
+from app.dependencies import get_db, require_role
+from app.models import AdminRole
 
 router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
 
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
 def create_enrollment(
                 course: EnrollmentCreate,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin, UserRole.faculty]))
+                current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
             ):
 
     try:
@@ -28,7 +28,7 @@ def create_enrollment(
 @router.get("/", response_model= list[EnrollmentResponse])
 def get_all_enrollments(
                         db:Session = Depends(get_db),
-                        current_user = Depends(get_current_user)
+                        current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                     ):
 
     try:
@@ -43,7 +43,7 @@ def get_all_enrollments(
 def get_enrollment_by_id(
                     enrollment_id: int,
                     db:Session = Depends(get_db),
-                    current_user = Depends(get_current_user)
+                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
                 ):
 
     try:
@@ -58,7 +58,7 @@ def get_enrollment_by_id(
 def delete_enrollment(
                 enrollment_id: int,
                 db:Session = Depends(get_db),
-                current_user = Depends(require_role([UserRole.admin]))
+                current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
             ):
      
     try:

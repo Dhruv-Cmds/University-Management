@@ -4,13 +4,14 @@ from jose import jwt, JWSError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
-from app.models import User, UserRole
+from app.models import Admin, AdminRole
+from app.models import Faculty
 from app.core import SECRET_KEY, ALGORITHM
 
 security = HTTPBearer()
 
 
-def get_current_user(
+def get_current_admin(
                     credentials: HTTPAuthorizationCredentials = Depends(security),
                     db: Session = Depends(get_db)
                 ):
@@ -20,9 +21,10 @@ def get_current_user(
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
         user_id = payload.get("sub")
+        role = payload.get("role")
 
-        if user_id is None:
-            raise HTTPException(status_code=401, detail="Invalid token payload")
+        if not user_id or not role:
+            raise HTTPException(status_code=401, detail="Invalid token")
 
     except ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
@@ -30,17 +32,27 @@ def get_current_user(
     except JWSError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = db.query(User).filter(User.id == int(user_id)).first()
+    model_map = {
+        "admin": Admin,
+        "faculty": Faculty
+    }
 
-    if user is None:
+    model = model_map.get(role)
+
+    if not model:
+        raise HTTPException(status_code=401, detail="Invalid role")
+
+    user = db.query(model).filter(model.id == int(user_id)).first()
+
+    if not user:
         raise HTTPException(status_code=401, detail="User not found")
 
     return user
 
 
-def require_role(allowed_roles: list[UserRole]):
+def require_role(allowed_roles: list[AdminRole]):
 
-    def role_checker(current_user: User = Depends(get_current_user)):
+    def role_checker(current_user: Admin = Depends(get_current_admin)):
 
         if current_user.role not in allowed_roles:
             raise HTTPException(

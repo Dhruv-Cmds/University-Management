@@ -21,3 +21,10 @@ CourseStr = Annotated[str,
                             max_length=100
                             )
                     ]
+
+PasswordStr = Annotated[str, 
+                        StringConstraints(
+                                min_length=6, 
+                                max_length=128
+                                )
+                    ]

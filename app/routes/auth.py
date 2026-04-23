@@ -2,19 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
-from app.schemas import UserLogin, UserCreate, UserResponse
-from app.services import login_user, user_service
+from app.schemas import AdminLogin, AdminCreate, AdminResponse
+from app.services import admin_service, login_admin
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix="/admin", tags=["Admin"])
 
 @router.post("/login")
-def login(user_data: UserLogin, db: Session = Depends(get_db)):
+def login(admin_data: AdminLogin, db: Session = Depends(get_db)):
 
     try:
-        return login_user(
+        return login_admin(
             db,
-            user_data.email,
-            user_data.password
+            admin_data.email,
+            admin_data.password
         )
 
     except ValueError as e:
@@ -23,10 +23,10 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
     
 
 
-@router.post("/signup", response_model=UserResponse)
-def signup(user_data: UserCreate, db: Session = Depends(get_db)):
+@router.post("/signup", response_model=AdminResponse)
+def signup(admin_data: AdminCreate, db: Session = Depends(get_db)):
     try:
-        return user_service.create_user(db, user_data)
+        return admin_service.create_admin(db, admin_data)
     
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
