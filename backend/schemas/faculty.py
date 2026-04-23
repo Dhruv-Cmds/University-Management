@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
-from app.schemas import NameStr, PhoneStr
-from app.models import GenderEnum
+from backend.schemas import NameStr, PhoneStr
+from backend.models import GenderEnum
 
 # Shared base (reusable fields)
 class FacultyBase(BaseModel):

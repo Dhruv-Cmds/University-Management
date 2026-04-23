@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import Enrollment
-from app.schemas import EnrollmentCreate
+from backend.models import Enrollment
+from backend.schemas import EnrollmentCreate
 
 
 #  create enrollment

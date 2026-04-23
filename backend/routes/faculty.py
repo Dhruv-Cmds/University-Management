@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.services import faculty_service
-from app.schemas import FacultyCreate, FacultyResponse
+from backend.services import faculty_service
+from backend.schemas import FacultyCreate, FacultyResponse
 
-from app.dependencies import get_db, require_role
-from app.models import AdminRole
+from backend.dependencies import get_db, require_role
+from backend.models import AdminRole
 
 router = APIRouter(prefix="/faculties", tags=["Faculties"])
 

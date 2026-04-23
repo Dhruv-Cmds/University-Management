@@ -1,6 +1,6 @@
 import pytest
-from app.db.session import SessionLocal
-from app.models import User
+from backend.db.session import SessionLocal
+from backend.models import User
 
 @pytest.fixture(autouse=True)
 def clean_db():

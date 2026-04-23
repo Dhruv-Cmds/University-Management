@@ -1,11 +1,11 @@
-from app.routes import courses, enrollements, faculty, students
+from backend.routes import courses, enrollements, faculty, students
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db import engine, Base 
+from backend.db import engine, Base 
 
-from app.routes import auth
+from backend.routes import auth
 
 app = FastAPI()
 

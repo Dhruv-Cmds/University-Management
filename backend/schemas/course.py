@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.schemas import CourseStr
+from backend.schemas import CourseStr
 
 # Shared base (reusable fields)
 class CourseBase(BaseModel):

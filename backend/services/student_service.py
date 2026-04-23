@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import Student, Admin, Faculty
-from app.schemas import StudentCreate
+from backend.models import Student, Admin, Faculty
+from backend.schemas import StudentCreate
 
 #  create student
 def create_student(db:Session, student_data: StudentCreate):

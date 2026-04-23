@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
-from app.models import AdminRole
+from backend.models import AdminRole
 
-from app.schemas import PasswordStr
+from backend.schemas import PasswordStr
 
 # shared fields
 class AdminBase(BaseModel):

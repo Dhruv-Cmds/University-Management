@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum
 
-from app.models import GenderEnum
-from app.db import Base
+from backend.models import GenderEnum
+from backend.db import Base
 
 class Faculty(Base):
 

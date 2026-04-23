@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.db import Base
+from backend.db import Base
 
 class Enrollment(Base):
 

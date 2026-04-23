@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import Admin
-from app.core.security import verify_password, create_access_token
+from backend.models import Admin
+from backend.core.security import verify_password, create_access_token
 
 
 def authenticate_admin(db: Session, email: str, password: str):

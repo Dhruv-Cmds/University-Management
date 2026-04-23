@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from app.models import Admin
-from app.schemas import AdminCreate
+from backend.models import Admin
+from backend.schemas import AdminCreate
 
-from app.core import hash_password
+from backend.core import hash_password
 
 
 def create_admin(db: Session, admin_data: AdminCreate):
