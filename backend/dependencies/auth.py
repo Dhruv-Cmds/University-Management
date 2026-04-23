@@ -3,10 +3,10 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWSError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 
-from app.dependencies import get_db
-from app.models import Admin, AdminRole
-from app.models import Faculty
-from app.core import SECRET_KEY, ALGORITHM
+from dependencies import get_db
+from models import Admin, AdminRole
+from models import Faculty
+from core import SECRET_KEY, ALGORITHM
 
 security = HTTPBearer()
 
