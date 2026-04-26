@@ -11,13 +11,10 @@ app = FastAPI()
 
 @app.on_event("startup")
 def on_startup():
-    print("⏳ Waiting for DB...")
     time.sleep(10) 
     Base.metadata.create_all(bind=engine)
-    print("✅ DB ready and tables created")
 
 app.include_router(auth.router)
-
 
 app.add_middleware(
     CORSMiddleware,

@@ -14,27 +14,21 @@ function showMessage(text, type = "success") {
 async function signup() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const role = document.getElementById("role").value;
+    const role = document.getElementById("role").value.toLowerCase(); // FIX
 
-    console.log({ email, password, role });
-
-    const res = await fetch("http://127.0.0.1:8000/auth/signup", {
+    const res = await fetch(`${BASE_URL}/admin/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            email: email,
-            password: password,
-            role: role
-        })
+        body: JSON.stringify({ email, password, role })
     });
 
     const data = await res.json();
-    console.log("Response:", data);
+    console.log("SIGNUP RESPONSE:", data);
 
     if (res.ok) {
         showMessage("Signup success");
     } else {
-        showMessage(`${JSON.stringify(data)}`, "error");
+        showMessage(data.detail || "Signup failed", "error");
     }
 }
 
@@ -42,19 +36,26 @@ async function login() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email, password })
-    });
+    try {
+        const res = await fetch(`${BASE_URL}/admin/login`, {  // ✅ FIXED ENDPOINT
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
 
-    const data = await res.json();
+        const data = await res.json(); // ✅ FIXED
+        console.log("LOGIN RESPONSE:", data);
 
-    if (res.ok) {
-        token = data.access_token;
-        showMessage("Logged in successfully");
-    } else {
-        showMessage(`${data.detail}`, "error");
+        if (res.ok) {
+            token = data.access_token;
+            showMessage("Logged in successfully");
+        } else {
+            showMessage(data.detail || "Login failed", "error");
+        }
+
+    } catch (err) {
+        console.error("LOGIN ERROR:", err);
+        showMessage("Something went wrong", "error");
     }
 }
 
@@ -77,7 +78,7 @@ async function createCourse() {
         lastCourseId = data.id;
         showMessage("Course created");
     } else {
-        showMessage(`${data.detail}`, "error");
+        showMessage(data.detail, "error");
     }
 }
 
@@ -106,9 +107,9 @@ async function createStudent() {
 
     if (res.ok) {
         lastStudentId = data.id;
-        showMessage(" Student created");
+        showMessage("Student created");
     } else {
-        showMessage(`${data.detail}`, "error");
+        showMessage(data.detail, "error");
     }
 }
 
@@ -138,7 +139,7 @@ async function createFaculty() {
     if (res.ok) {
         showMessage("Faculty created");
     } else {
-        showMessage(`${data.detail}`, "error");
+        showMessage(data.detail, "error");
     }
 }
 
@@ -166,6 +167,6 @@ async function enroll() {
     if (res.ok) {
         showMessage("Enrollment successful");
     } else {
-        showMessage(`${data.detail}`, "error");
+        showMessage(data.detail, "error");
     }
 }
