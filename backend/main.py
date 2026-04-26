@@ -2,14 +2,19 @@ from backend.routes import courses, enrollements, faculty, students
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+import time
 from backend.db import engine, Base 
 
 from backend.routes import auth
 
 app = FastAPI()
 
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def on_startup():
+    print("⏳ Waiting for DB...")
+    time.sleep(10) 
+    Base.metadata.create_all(bind=engine)
+    print("✅ DB ready and tables created")
 
 app.include_router(auth.router)
 
