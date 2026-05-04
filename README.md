@@ -96,7 +96,6 @@ University-Management/
 │       └── tests/               # Pytest test suite
 │
 ├── frontend/
-│   └── index.html               # Basic HTML/CSS/JS dashboard
 │
 ├── .gitignore
 ├── .gitattributes
