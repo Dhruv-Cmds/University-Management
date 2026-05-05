@@ -1,2 +1,2 @@
 from .base import Base
-from .session import SessionLocal, engine
+from .session import engine, AsyncSessionLocal 
