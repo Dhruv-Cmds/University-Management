@@ -27,15 +27,15 @@
                 <option value="student">Student</option>
             </select>
 
-            <button onclick="signup()">Signup</button>
-            <button class="secondary" onclick="login()">Login</button>
+            <button id="signupBtn">Signup</button>
+            <button id="loginBtn">Login</button>
         </div>
 
         <!-- COURSE -->
         <div class="card">
             <h2>Course</h2>
             <input id="course_name" placeholder="Course Name">
-            <button onclick="createCourse()">Create Course</button>
+            <button type="button" onclick="createCourse()">Create Course</button>
         </div>
 
         <!-- STUDENT -->
@@ -48,7 +48,7 @@
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-            <button onclick="createStudent()">Create Student</button>
+            <button type="button" onclick="createStudent()">Create Student</button>
         </div>
 
         <!-- FACULTY -->
@@ -61,14 +61,14 @@
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-            <button onclick="createFaculty()">Create Faculty</button>
+            <button type="button" onclick="createFaculty()">Create Faculty</button>
         </div>
 
         <!-- ENROLL -->
         <div class="card">
             <h2>Enrollment</h2>
             <p>Uses last created Student & Course</p>
-            <button onclick="enroll()">Enroll</button>
+            <button type="button" onclick="enroll()">Enroll</button>
         </div>
 
     </div>

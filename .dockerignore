@@ -1,0 +1,10 @@
+docker/databases/
+docker/mysql-data/
+*.sock
+*.pid
+*.log
+__pycache__/
+node_modules/
+.env
+*.sock
+docker/databases/

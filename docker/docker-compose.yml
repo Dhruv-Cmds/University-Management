@@ -1,14 +1,36 @@
 services:
   ums-api:
-    build: .
     container_name: ums-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - "8002:8000"
     volumes:
-      - .:/app
+      - ..:/app
+    depends_on:
+      - ums-db
+    env_file:
+      - .env
     environment:
-      DB_HOST: host.docker.internal
-      DB_PORT: 3008
-      DB_NAME: ums
-      DB_USER: root
-      DB_PASSWORD: root
+      DB_HOST: ums-db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+  ums-db:
+    container_name: ums-db
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3009:3306"
+    volumes:
+      - ./databases/ums:/var/lib/mysql

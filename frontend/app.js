@@ -1,4 +1,6 @@
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "http://127.0.0.1:8002";
+
+console.log("APP JS LOADED 🚀");
 
 let token = "";
 let lastStudentId = null;
@@ -10,11 +12,13 @@ function showMessage(text, type = "success") {
     box.className = `message ${type}`;
 }
 
-// AUTH
+// ================= AUTH =================
 async function signup() {
+    console.log("SIGNUP FUNCTION RUNNING 🚀");
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const role = document.getElementById("role").value.toLowerCase(); // FIX
+    const role = document.getElementById("role").value.toLowerCase();
 
     const res = await fetch(`${BASE_URL}/admin/signup`, {
         method: "POST",
@@ -33,34 +37,35 @@ async function signup() {
 }
 
 async function login() {
+    console.log("LOGIN FUNCTION RUNNING 🚀");
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    try {
-        const res = await fetch(`${BASE_URL}/admin/login`, {  // ✅ FIXED ENDPOINT
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
+    const res = await fetch(`${BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
 
-        const data = await res.json(); // ✅ FIXED
-        console.log("LOGIN RESPONSE:", data);
+    const data = await res.json();
 
-        if (res.ok) {
-            token = data.access_token;
-            showMessage("Logged in successfully");
-        } else {
-            showMessage(data.detail || "Login failed", "error");
-        }
+    console.log("LOGIN RESPONSE:", data);
+    console.log("STATUS:", res.status);
 
-    } catch (err) {
-        console.error("LOGIN ERROR:", err);
-        showMessage("Something went wrong", "error");
+    if (res.ok) {
+        token = data.access_token;
+        console.log("TOKEN:", token);
+        showMessage("Logged in successfully");
+    } else {
+        showMessage(data.detail || "Login failed", "error");
     }
 }
 
-// COURSE
+// ================= COURSE =================
 async function createCourse() {
+    console.log("CREATE COURSE 🚀");
+
     const course_name = document.getElementById("course_name").value;
 
     const res = await fetch(`${BASE_URL}/courses/`, {
@@ -82,8 +87,10 @@ async function createCourse() {
     }
 }
 
-// STUDENT
+// ================= STUDENT =================
 async function createStudent() {
+    console.log("CREATE STUDENT 🚀");
+
     const student_name = document.getElementById("student_name").value;
     const email = document.getElementById("student_email").value;
     const phone_number = document.getElementById("phone").value;
@@ -113,8 +120,10 @@ async function createStudent() {
     }
 }
 
-// FACULTY
+// ================= FACULTY =================
 async function createFaculty() {
+    console.log("CREATE FACULTY 🚀");
+
     const faculty_name = document.getElementById("faculty_name").value;
     const email = document.getElementById("faculty_email").value;
     const phone_number = document.getElementById("faculty_phone").value;
@@ -143,8 +152,10 @@ async function createFaculty() {
     }
 }
 
-// ENROLL
+// ================= ENROLL =================
 async function enroll() {
+    console.log("ENROLL 🚀");
+
     if (!lastStudentId || !lastCourseId) {
         showMessage("Create student and course first", "error");
         return;
@@ -170,3 +181,13 @@ async function enroll() {
         showMessage(data.detail, "error");
     }
 }
+
+// ================= EVENT BINDING (IMPORTANT) =================
+document.getElementById("signupBtn").addEventListener("click", signup);
+document.getElementById("loginBtn").addEventListener("click", login);
+document.getElementById("courseBtn").addEventListener("click", createCourse);
+document.getElementById("studentBtn").addEventListener("click", createStudent);
+document.getElementById("facultyBtn").addEventListener("click", createFaculty);
+document.getElementById("enrollBtn").addEventListener("click", enroll);
+
+console.log("EVENTS BOUND ✅");
