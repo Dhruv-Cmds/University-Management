@@ -16,7 +16,6 @@ A fully functional **full-stack** system built with **FastAPI** (backend) and a 
 - 🧪 Full API Test Suite with Pytest
 - 🗄️ MySQL Database with SQLAlchemy ORM
 
-hi
 ---
 
 ## 🌐 Frontend (Basic Dashboard)
