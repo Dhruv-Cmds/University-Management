@@ -1,0 +1,14 @@
+services:
+  ums-api:
+    build: .
+    container_name: ums-api
+    ports:
+      - "8002:8000"
+    volumes:
+      - .:/app
+    environment:
+      DB_HOST: host.docker.internal
+      DB_PORT: 3008
+      DB_NAME: ums
+      DB_USER: root
+      DB_PASSWORD: root
