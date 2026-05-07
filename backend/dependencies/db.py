@@ -1,13 +1,6 @@
-from backend.db import SessionLocal
+from backend.db import AsyncSessionLocal
 
-def get_db():
+async def get_db():
 
-    db = SessionLocal()
-
-    try:
-        
+    async with AsyncSessionLocal() as db:
         yield db
-        
-    finally:
-        
-        db.close()

@@ -1,7 +1,9 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import jwt, JWSError, ExpiredSignatureError
-from sqlalchemy.orm import Session
+from jose import jwt, JWTError, ExpiredSignatureError
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from backend.dependencies import get_db
 from backend.models import Admin, AdminRole
@@ -11,9 +13,9 @@ from backend.core import SECRET_KEY, ALGORITHM
 security = HTTPBearer()
 
 
-def get_current_admin(
+async def get_current_admin(
                     credentials: HTTPAuthorizationCredentials = Depends(security),
-                    db: Session = Depends(get_db)
+                    db: AsyncSession = Depends(get_db)
                 ):
     token = credentials.credentials
 
@@ -29,7 +31,7 @@ def get_current_admin(
     except ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
 
-    except JWSError:
+    except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
     model_map = {
@@ -42,7 +44,10 @@ def get_current_admin(
     if not model:
         raise HTTPException(status_code=401, detail="Invalid role")
 
-    user = db.query(model).filter(model.id == int(user_id)).first()
+    user = await db.execute(
+        select(model)
+        .where(model.id == int(user_id))
+    )
 
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
@@ -52,7 +57,7 @@ def get_current_admin(
 
 def require_role(allowed_roles: list[AdminRole]):
 
-    def role_checker(current_user: Admin = Depends(get_current_admin)):
+    async def role_checker(current_user: Admin = Depends(get_current_admin)):
 
         if current_user.role not in allowed_roles:
             raise HTTPException(
