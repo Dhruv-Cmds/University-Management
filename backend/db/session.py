@@ -16,7 +16,7 @@ DB_NAME= os.getenv("DB_NAME")
 if not all ([DB_USER, DB_PASSWORD, DB_HOST, DB_NAME]):
     raise ValueError("Missing database environment variables")
 
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_NAME}"
+DATABASE_URL = f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_NAME}"
 
 engine = create_async_engine(
     DATABASE_URL,
