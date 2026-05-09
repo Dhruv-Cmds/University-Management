@@ -19,7 +19,7 @@ async def create_admin(
     admin_data: AdminCreate,
     db: AsyncSession = Depends(get_db)):
 
-    return admin_service.create_admin(db, admin_data)
+    return await admin_service.create_admin(db, admin_data)
 
 
 @router.post("/login")
@@ -45,7 +45,7 @@ async def get_all_admin(
     ):
 
 
-    return admin_service.get_all_admin(db)
+    return await admin_service.get_all_admin(db)
 
     
 @router.get("/{admin_id}", response_model= AdminResponse)
@@ -57,7 +57,7 @@ async def get_admin_by_id(
         current_user = Depends(require_role([AdminRole.admin]))
     ):
 
-    return admin_service.get_admin_by_id(db, admin_id)
+    return await admin_service.get_admin_by_id(db, admin_id)
     
 @router.delete("/{admin_id}", response_model= AdminResponse)
 @limiter.limit("2/second")
@@ -68,4 +68,4 @@ async def delete_admin_by_id(
         current_user = Depends(require_role([AdminRole.admin]))
     ):
 
-    return admin_service.delete_admin_by_id(db, course_id)
+    return await admin_service.delete_admin_by_id(db, course_id)
