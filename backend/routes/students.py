@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Request
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.services import student_service
 from backend.schemas import StudentCreate, StudentResponse
@@ -7,65 +7,51 @@ from backend.schemas import StudentCreate, StudentResponse
 from backend.dependencies import get_db, require_role
 from backend.models import AdminRole
 
+from backend.core import limiter
 
 router = APIRouter(prefix="/students", tags=["Students"])
 
 # only what’s in StudentResponse is returned.
 @router.post("/", response_model = StudentResponse)
-def create_student(
-                student: StudentCreate,
-                db:Session = Depends(get_db),
-                current_user = Depends(require_role([AdminRole.admin]))
-            ):
+@limiter.limit("3/second")
+async def create_student(
+        request: Request,
+        student: StudentCreate,
+        db:AsyncSession = Depends(get_db),
+        current_user = Depends(require_role([AdminRole.admin]))
+    ):
 
-    try:
-        # create_course not belongs to this function it's belongs to sevice folder
-        return student_service.create_student(db, student)
-    
-    except ValueError as e:
-
-        raise HTTPException(status_code=400, detail=str(e))
+    # create_course not belongs to this function it's belongs to sevice folder
+    return await student_service.create_student(db, student)
     
 @router.get("/", response_model= list[StudentResponse])
-def get_all_students(
-                    db:Session = Depends(get_db),
-                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
-                ):
+@limiter.limit("3/second")
+async def get_all_students(
+        request: Request,
+        db:AsyncSession = Depends(get_db),
+        current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
+    ):
 
-    try:
-
-        return student_service.get_all_students(db)
-    
-    except ValueError as e:
-
-        raise HTTPException(status_code=400, detail=str(e))
+    return await student_service.get_all_students(db)
     
 @router.get("/{student_id}", response_model= StudentResponse)
-def get_student_by_id(
-                    student_id: int,
-                    db:Session = Depends(get_db),
-                    current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
-                ):
+@limiter.limit("3/second")
+async def get_student_by_id(
+        request: Request,
+        student_id: int,
+        db:AsyncSession = Depends(get_db),
+        current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
+    ):
 
-    try:
-
-        return student_service.get_student_by_id(db, student_id)
-    
-    except ValueError as e:
-
-        raise HTTPException (status_code=404, detail= str(e))
+    return await student_service.get_student_by_id(db, student_id)
     
 @router.delete("/{student_id}", response_model= StudentResponse)
-def delete_student(
-                student_id: int,
-                db:Session = Depends(get_db),
-                current_user = Depends(require_role([AdminRole.admin]))
-            ):
+@limiter.limit("2/second")
+async def delete_student(
+        request: Request,
+        student_id: int,
+        db:AsyncSession = Depends(get_db),
+        current_user = Depends(require_role([AdminRole.admin]))
+    ):
      
-    try:
-
-        return student_service.delete_student(db, student_id)
-    
-    except ValueError as e:
-
-        raise HTTPException (status_code=404, detail= str(e))
+    return await student_service.delete_student(db, student_id)
