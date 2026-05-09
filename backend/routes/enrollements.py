@@ -9,20 +9,20 @@ from backend.models import AdminRole
 
 from backend.core import limiter
 
-router = APIRouter(prefix="/enrollment", tags=["Enrollments"])
+router = APIRouter(prefix="/enrollments", tags=["Enrollments"])
 
 # only what’s in EnrollmentResponse is returned.
 @router.post("/", response_model = EnrollmentResponse)
 @limiter.limit("3/second")
 async def create_enrollment(
         request: Request,
-        course: EnrollmentCreate,
+        enrollment: EnrollmentCreate,
         db:AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
     ):
 
     # create_course not belongs to this function it's belongs to sevice folder
-    return await enrollment_service.create_enrollment(db, course)
+    return await enrollment_service.create_enrollment(db, enrollment)
     
 @router.get("/", response_model= list[EnrollmentResponse])
 @limiter.limit("3/second")
