@@ -1,4 +1,6 @@
-from sqlalchemy import select, update
+from fastapi import HTTPException
+
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -15,10 +17,15 @@ async def create_admin(db: AsyncSession, admin_data: AdminCreate):
         .where(Admin.email == admin_data.email)
     )
 
+    
+    # scalar_one_or_none = Give me one object if found, otherwise give None
     existing = result.scalar_one_or_none()
 
     if existing:
-        raise ValueError("Email already registered")
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
 
     new_admin = Admin(
         email=admin_data.email,
@@ -32,22 +39,25 @@ async def create_admin(db: AsyncSession, admin_data: AdminCreate):
         await db.commit()
         await db.refresh(new_admin)
 
-    except IntegrityError as e:
+    except IntegrityError:
 
         await db.rollback()
-        raise e
+        
+        raise HTTPException(
+            status_code=400,
+            detail="Database integrity error"
+        )
         
     return new_admin
 
 
 async def get_all_admin(db: AsyncSession):
 
-    result  = await db.execute((Admin))
+    result  = await db.execute(
+        select(Admin)
+    )
+
     admins = result.scalars().all()
-
-    if not admins:
-
-        raise ValueError ("Admin not found")
     
     return admins
 
@@ -57,11 +67,15 @@ async def get_admin_by_id (db: AsyncSession, admin_id: int):
         select(Admin)
         .where(Admin.id == admin_id)
     )
+
     admin = result.scalar_one_or_none()
 
     if not admin:
 
-        raise ValueError ("Admin not found")
+        raise HTTPException (
+            status_code=404,
+            detail="Admin not found"
+        )
     
     return admin
 
@@ -76,16 +90,23 @@ async def delete_admin_by_id(db: AsyncSession, admin_id: int):
 
     if not admin:
 
-        raise ValueError ("Admin not found")
+        raise HTTPException (
+            status_code=404,
+            detail="Admin not found"
+        )
     
     try:
 
         await db.delete(admin)
         await db.commit()
 
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
 
         await db.rollback()
-        raise e
+
+        raise HTTPException (
+            status_code=500,
+            detail="Database error"
+        )
     
     return admin
