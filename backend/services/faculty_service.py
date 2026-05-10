@@ -1,91 +1,147 @@
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
 from backend.models import Faculty, Admin, Student
 from backend.schemas import FacultyCreate
 
-#  create faculty
-def create_faculty(db:Session, faculty_data: FacultyCreate):
 
-    existing_email_phone  = db.query(Faculty).filter(
-        (Faculty.email == faculty_data.email) |
-        (Faculty.phone_number == faculty_data.phone_number)).first()
+#  create faculty
+async def create_faculty(db: AsyncSession, faculty_data: FacultyCreate):
+
+    result = await db.execute(
+        select(Faculty).where(
+            (Faculty.email == faculty_data.email) |
+            (Faculty.phone_number == faculty_data.phone_number)
+        )
+    )
+
+    existing_email_phone = result.scalar_one_or_none()
 
     if existing_email_phone:
 
-        raise ValueError ("Email already registered")
-    
-    existing_phone_email_student = db.query(Student).filter(
-    (Student.phone_number == faculty_data.phone_number) |
-    (Student.email == faculty_data.email)).first()
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+
+    result = await db.execute(
+        select(Student).where(
+            (Student.phone_number == faculty_data.phone_number) |
+            (Student.email == faculty_data.email)
+        )
+    )
+
+    existing_phone_email_student = result.scalar_one_or_none()
 
     if existing_phone_email_student:
-        
-        raise ValueError ("Phone number already used")
-    
-    existing_admin = db.query(Admin).filter(Admin.email == faculty_data.email).first()
+
+        raise HTTPException(
+            status_code=400,
+            detail="Phone number already used"
+        )
+
+    result = await db.execute(
+        select(Admin).where(Admin.email == faculty_data.email)
+    )
+
+    existing_admin = result.scalar_one_or_none()
 
     if existing_admin:
-        raise ValueError("Email already used by a user")
 
-    new_faculty = Faculty (
+        raise HTTPException(
+            status_code=400,
+            detail="Email already used by a user"
+        )
 
-        faculty_name = faculty_data.faculty_name,
-        email = faculty_data.email,
-        phone_number = faculty_data.phone_number,
-        gender = faculty_data.gender
+    new_faculty = Faculty(
+        faculty_name=faculty_data.faculty_name,
+        email=faculty_data.email,
+        phone_number=faculty_data.phone_number,
+        gender=faculty_data.gender
     )
 
     try:
 
         db.add(new_faculty)
 
-        db.commit()
+        await db.commit()
 
-        db.refresh(new_faculty)
+        await db.refresh(new_faculty)
 
-    except Exception as e:
+    except Exception:
 
-        db.rollback()
-        raise e
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return new_faculty
 
 
 #  get all faculty
-def get_all_faculties(db:Session):
+async def get_all_faculties(db: AsyncSession):
 
-    return db.query(Faculty).all()
+    result = await db.execute(
+        select(Faculty)
+    )
+
+    return result.scalars().all()
 
 
 #  select specific id to check faculty
-def get_faculty_by_id(db:Session, faculty_id: int):
+async def get_faculty_by_id(db: AsyncSession, faculty_id: int):
 
-    faculty = db.query(Faculty).filter(Faculty.id == faculty_id).first()
+    result = await db.execute(
+        select(Faculty)
+        .where(Faculty.id == faculty_id)
+    )
+
+    faculty = result.scalar_one_or_none()
 
     if not faculty:
 
-        raise ValueError ("No faculty found")
-    
+        raise HTTPException(
+            status_code=404,
+            detail="No faculty found"
+        )
+
     return faculty
 
 
 # delete faculty
-def delete_faculty (db:Session, faculty_id: int):
+async def delete_faculty(db: AsyncSession, faculty_id: int):
 
-    faculty = db.query(Faculty).filter(Faculty.id == faculty_id).first()
+    result = await db.execute(
+        select(Faculty)
+        .where(Faculty.id == faculty_id)
+    )
+
+    faculty = result.scalar_one_or_none()
 
     if not faculty:
 
-        raise ValueError ("No faculty found")
-    
+        raise HTTPException(
+            status_code=404,
+            detail="No faculty found"
+        )
+
     try:
-    
-        db.delete(faculty)
 
-        db.commit()
+        await db.delete(faculty)
 
-    except Exception as e:
-        
-        db.rollback()
-        raise e
-    
+        await db.commit()
+
+    except Exception:
+
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
+
     return faculty
