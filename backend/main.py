@@ -22,9 +22,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="FastAPI College Management System",
+    title="FastAPI University Management System",
     description=(
-        "Secure college management API for admin authentication, "
+        "Secure University management API for admin authentication, "
         "student management, faculty management, course handling, "
         "and enrollment operations. "
         "Use the /admin/login endpoint to obtain authentication access "
