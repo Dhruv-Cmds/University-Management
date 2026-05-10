@@ -88,9 +88,9 @@ async def get_admin_by_id(
 @limiter.limit("2/second")
 async def delete_admin_by_id(
         request: Request, 
-        course_id: int,
+        admin_id: int,
         db: AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin]))
     ):
 
-    return await admin_service.delete_admin_by_id(db, course_id)
+    return await admin_service.delete_admin_by_id(db, admin_id)

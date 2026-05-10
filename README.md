@@ -1,328 +1,520 @@
 # 🎓 University Management System API
 
-A fully functional **full-stack** system built with **FastAPI** (backend) and a lightweight **HTML/CSS/JS** dashboard (frontend), featuring JWT authentication, role-based access control, and complete test coverage.
+A fully functional **full-stack University Management System** built with **FastAPI**, **MySQL**, and **Docker**, featuring JWT authentication, role-based access control, async database operations, and production-style API architecture.
+
+The project includes a lightweight frontend dashboard built with **HTML/CSS/JavaScript** for testing and interacting with the API.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
 - 🔐 JWT Authentication (Signup & Login)
-- 🛡️ Role-Based Access Control (Admin, Faculty, etc.)
-- 🔑 Admin Management (create, list, fetch, delete)
+- 🛡️ Role-Based Access Control (Admin, Faculty)
+- ⚡ Async FastAPI + Async SQLAlchemy
+- 🐳 Dockerized Backend & Database
 - 📚 Course Management
 - 👨‍🎓 Student Management
 - 👩‍🏫 Faculty Management
-- 🔗 Enrollment System (Student ↔ Course)
-- 🧪 Full API Test Suite with Pytest
-- 🗄️ MySQL Database with SQLAlchemy ORM
+- 🔗 Enrollment System
+- 🧪 Full Async Pytest Suite
+- 📈 k6 Load Testing & Benchmarking
+- 🗄️ MySQL Database Integration
+- 📄 Automatic Swagger/OpenAPI Documentation
+- 🔒 Password Hashing with bcrypt
+- 🚦 Rate Limiting using SlowAPI
 
 ---
 
-## 🌐 Frontend (Basic Dashboard)
+# 🌐 Frontend Dashboard
 
-A simple frontend is included using **HTML, CSS, and JavaScript** to interact with the API.
+A simple frontend dashboard is included using:
 
-### Features
+- HTML
+- CSS
+- JavaScript
+
+It provides a lightweight UI to interact with the backend API.
+
+---
+
+## ✨ Frontend Features
 
 - 🔐 Signup & Login
 - 📚 Create Courses
 - 👨‍🎓 Create Students
 - 👩‍🏫 Create Faculty
-- 🔗 Enrollment system
-- 🛡️ Role-based access control (via backend)
-
-### Notes
-
-- This frontend is a **basic testing dashboard**, not a production UI.
-- It helps visualize API interactions without tools like Postman.
-- UI/UX improvements and React migration are planned.
-
-### ▶️ Running Frontend
-
-1. Start the backend server:
-
-```bash
-uvicorn app.main:app --reload
-```
-
-2. Open in browser:
-
-```
-frontend/index.html
-```
-
-### ⚠️ Security Note
-
-- Role selection is handled **only by the backend**
-- Frontend does **NOT** control permissions
-- JWT tokens are required for all protected routes
+- 🔗 Create Enrollments
+- 🛡️ JWT Protected API Calls
 
 ---
 
-## 🏗️ Tech Stack
+## ⚠️ Frontend Notes
+
+- This frontend is a **basic API interaction dashboard**
+- It is **not intended as a production UI**
+- React frontend migration is planned
+- Authorization logic is handled entirely by the backend
+
+---
+
+# 🏗️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Backend | FastAPI 0.136.0 |
+| Backend | FastAPI |
 | Database | MySQL |
-| ORM | SQLAlchemy 2.0.49 |
-| Validation | Pydantic 2.13.2 |
-| Authentication | JWT via python-jose 3.5.0 |
-| Password Hashing | Passlib 1.7.4 (bcrypt 4.0.1) |
-| Migrations | Alembic 1.18.4 |
-| Testing | Pytest 9.0.3 |
-| Server | Uvicorn 0.44.0 |
-| HTTP Client | HTTPX 0.28.1 |
+| ORM | SQLAlchemy 2.x |
+| Async Driver | aiomysql |
+| Validation | Pydantic |
+| Authentication | JWT (python-jose) |
+| Password Hashing | bcrypt + passlib |
+| Testing | Pytest + pytest-asyncio |
+| Load Testing | k6 |
+| Server | Uvicorn |
+| Containerization | Docker + Docker Compose |
 
 ---
 
-## 📁 Project Structure
+# 📁 Project Structure
 
-```
+```text
 University-Management/
 │
 ├── backend/
-│   └── app/
-│       ├── main.py              # FastAPI app entry point
-│       ├── core/                # Config, security, JWT logic
-│       ├── db/                  # Database session & engine
-│       ├── dependencies/        # FastAPI Depends() helpers
-│       ├── migrations/          # Alembic migration scripts
-│       ├── models/              # SQLAlchemy ORM models
-│       ├── quires/              # Database query functions
-│       ├── routes/              # API route handlers
-│       ├── schemas/             # Pydantic request/response schemas
-│       ├── services/            # Business logic layer
-│       └── tests/               # Pytest test suite
+│   ├── core/                # Config, JWT, security, limiter
+│   ├── db/                  # Database engine & session
+│   ├── dependencies/        # FastAPI dependencies
+│   ├── migrations/          # Alembic migrations
+│   ├── models/              # SQLAlchemy ORM models
+│   ├── queries/             # Database query layer
+│   ├── routes/              # API routes
+│   ├── schemas/             # Pydantic schemas
+│   ├── services/            # Business logic layer
+│   ├── tests/               # Async pytest suite
+│   └── main.py              # FastAPI entrypoint
 │
 ├── frontend/
 │
-├── .gitignore
-├── .gitattributes
-├── LICENSE                      # MIT License
+├── docker/
+│
 ├── requirements.txt
-└── README.md
+├── docker-compose.yml
+├── README.md
+└── LICENSE
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+# ⚙️ Local Setup
 
-### 1️⃣ Clone the repository
+## 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/Dhruv-Cmds/University-Management.git
+
 cd University-Management
 ```
 
-### 2️⃣ Create a virtual environment
+---
+
+## 2️⃣ Create Virtual Environment
 
 ```bash
 python -m venv .venv
+```
 
-# Windows
+### Windows
+
+```bash
 .venv\Scripts\activate
+```
 
-# macOS / Linux
+### Linux / macOS
+
+```bash
 source .venv/bin/activate
 ```
 
-### 3️⃣ Install dependencies
+---
+
+## 3️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Configure environment variables
+---
 
-Create a `.env` file in the `backend/` directory:
+## 4️⃣ Configure Environment Variables
+
+Create a `.env` file:
 
 ```env
-DB_USER=your_mysql_user
-DB_PASSWORD=your_mysql_password
-DB_HOST=localhost
-DB_NAME=universitymanagement
+COMPOSE_PROJECT_NAME=ums-app
 
-SECRET_KEY=your_secret_key
+DB_NAME=ums
+TEST_DB_NAME=ums_test
+DB_USER= ums_user
+DB_PASSWORD=ums_password
+MYSQL_ROOT_PASSWORD=ums_password
+
+SECRET_KEY=yourkey
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 ```
 
-### 5️⃣ Create the database
+---
 
-Run this in your MySQL client:
+## 5️⃣ Create Database
 
 ```sql
-CREATE DATABASE universitymanagement;
+CREATE DATABASE ums;
 ```
 
-### 6️⃣ Run the server
+---
+
+## 6️⃣ Run Backend
 
 ```bash
-cd backend
-uvicorn app.main:app --reload
+uvicorn backend.main:app --reload
 ```
 
-Visit the interactive API docs at:
+Swagger Docs:
 
-```
+```text
 http://127.0.0.1:8000/docs
 ```
 
 ---
 
-## 🔐 Authentication
+# 🐳 Docker Setup
 
-All protected routes require a Bearer token in the request header:
+## Run Full Stack
 
+```bash
+docker compose up --build
 ```
+
+---
+
+## Services
+
+| Service | Port |
+|---|---|
+| FastAPI API | `8002` |
+| MySQL | `3009` |
+
+---
+
+## API Docs
+
+```text
+http://localhost:8002/docs
+```
+
+---
+
+# 🔐 Authentication
+
+Protected routes require:
+
+```text
 Authorization: Bearer <your_token>
 ```
 
-Admin signup and login are available at `POST /admin/signup` and `POST /admin/login`. See the [Admin endpoints](#-admin----admin) section above for details.
+---
+
+# 📡 API Endpoints
 
 ---
 
-## 📡 API Endpoints Overview
+## 🔑 Admin — `/admin`
 
-> Full interactive documentation available at `/docs` (Swagger UI) and `/redoc`.
-
----
-
-### 🔑 Admin — `/admin`
-
-| Method | Endpoint | Auth Required | Role | Description |
-|---|---|---|---|---|
-| POST | `/admin/signup` | ❌ | — | Register a new admin |
-| POST | `/admin/login` | ❌ | — | Login and receive JWT token |
-| GET | `/admin/` | ✅ | `admin` | List all admins |
-| GET | `/admin/{admin_id}` | ✅ | `admin` | Get admin by ID |
-| DELETE | `/admin/{admin_id}` | ✅ | `admin` | Delete admin by ID |
-
-**Schemas used:** `AdminCreate`, `AdminLogin`, `AdminResponse`
-
-**Login response:**
-```json
-{
-  "access_token": "...",
-  "token_type": "bearer"
-}
-```
-
----
-
-### 👨‍🎓 Students — `/students`
-
-| Method | Endpoint | Auth Required | Description |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/students/` | ✅ | Create a new student |
-| GET | `/students/` | ✅ | List all students |
-| GET | `/students/{id}` | ✅ | Get student by ID |
-| PUT | `/students/{id}` | ✅ | Update student |
-| DELETE | `/students/{id}` | ✅ | Delete student |
+| POST | `/admin/signup` | ❌ | Register admin |
+| POST | `/admin/login` | ❌ | Login and receive JWT |
+| GET | `/admin/` | ✅ | List all admins |
+| GET | `/admin/{admin_id}` | ✅ | Get admin by ID |
+| DELETE | `/admin/{admin_id}` | ✅ | Delete admin |
 
 ---
 
-### 👩‍🏫 Faculty — `/faculty`
+## 📚 Courses — `/courses`
 
-| Method | Endpoint | Auth Required | Description |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/faculty/` | ✅ | Create a new faculty member |
-| GET | `/faculty/` | ✅ | List all faculty |
-| GET | `/faculty/{id}` | ✅ | Get faculty by ID |
-| PUT | `/faculty/{id}` | ✅ | Update faculty |
-| DELETE | `/faculty/{id}` | ✅ | Delete faculty |
+| POST | `/courses/` | ✅ | Create course |
+| GET | `/courses/` | ✅ | List courses |
+| GET | `/courses/{course_id}` | ✅ | Get course by ID |
+| DELETE | `/courses/{course_id}` | ✅ | Delete course |
 
 ---
 
-### 📚 Courses — `/courses`
+## 👨‍🎓 Students — `/students`
 
-| Method | Endpoint | Auth Required | Description |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/courses/` | ✅ | Create a new course |
-| GET | `/courses/` | ✅ | List all courses |
-| GET | `/courses/{id}` | ✅ | Get course by ID |
-| PUT | `/courses/{id}` | ✅ | Update course |
-| DELETE | `/courses/{id}` | ✅ | Delete course |
+| POST | `/students/` | ✅ | Create student |
+| GET | `/students/` | ✅ | List students |
+| GET | `/students/{student_id}` | ✅ | Get student by ID |
+| DELETE | `/students/{student_id}` | ✅ | Delete student |
 
 ---
 
-### 🔗 Enrollments — `/enrollments`
+## 👩‍🏫 Faculties — `/faculties`
 
-| Method | Endpoint | Auth Required | Description |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/enrollments/` | ✅ | Enroll a student in a course |
-| GET | `/enrollments/` | ✅ | List all enrollments |
-| DELETE | `/enrollments/{id}` | ✅ | Remove an enrollment |
+| POST | `/faculties/` | ✅ | Create faculty |
+| GET | `/faculties/` | ✅ | List faculties |
+| GET | `/faculties/{faculty_id}` | ✅ | Get faculty by ID |
+| DELETE | `/faculties/{faculty_id}` | ✅ | Delete faculty |
 
 ---
 
-## 🧪 Running Tests
+## 🔗 Enrollments — `/enrollments`
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/enrollments/` | ✅ | Create enrollment |
+| GET | `/enrollments/` | ✅ | List enrollments |
+| GET | `/enrollments/{enrollment_id}` | ✅ | Get enrollment by ID |
+| DELETE | `/enrollments/{enrollment_id}` | ✅ | Delete enrollment |
+
+---
+
+# 🧪 Running Tests
+
+Run async pytest suite:
 
 ```bash
-cd backend
-python -m pytest -v
-```
-
-- ✔ All endpoints tested
-- ✔ Auth + RBAC included
-- ✔ Database interactions validated
-
----
-
-## 🧠 Key Concepts Implemented
-
-- Clean architecture: `routes → services → queries → models`
-- Dependency Injection via `FastAPI Depends()`
-- Secure password hashing with bcrypt
-- Token-based stateless authentication (JWT)
-- Foreign key relationships and constraints in MySQL
-- Database migrations with Alembic
-- Test isolation with dynamic data generation
-
----
-
-## 📦 Key Dependencies (from `requirements.txt`)
-
-```
-fastapi==0.136.0
-uvicorn==0.44.0
-sqlalchemy==2.0.49
-alembic==1.18.4
-pydantic==2.13.2
-python-jose==3.5.0
-passlib==1.7.4
-bcrypt==4.0.1
-pymysql==1.1.2
-python-dotenv==1.2.2
-httpx==0.28.1
-pytest==9.0.3
-email-validator==2.3.0
+pytest -v
 ```
 
 ---
 
-## 📌 Future Improvements
+## Test Coverage Includes
 
-- ☁️ Deployment on Render / Railway
+- JWT authentication
+- Role-based access control
+- CRUD operations
+- Database integration
+- Enrollment flow
+- Protected routes
+- Async route testing
+
+---
+
+# 🚀 Performance & Load Testing
+
+The API was stress-tested using **k6** against a fully containerized environment:
+
+- 🐳 FastAPI running in Docker
+- 🐬 MySQL running in Docker
+- ⚡ Async SQLAlchemy + aiomysql
+- 🔐 JWT Authentication
+- 🔑 bcrypt password hashing
+- 🛡️ Rate limiting enabled
+- 🧪 Mixed authenticated CRUD workloads
+
+---
+
+# 📊 Load Testing Results
+
+| Test | Virtual Users | Duration | Requests/sec | Avg Latency | Success Rate |
+|---|---|---|---|---|---|
+| Admin Auth Load Test | 500 | 60s | ~388 req/s | ~781ms | 99.14% |
+| Mixed API Load Test | 1000 | 60s | ~550 req/s | ~1.26s | 97.19% |
+| Admin Signup Success | 1000 | 60s | Included Above | ~1.26s | 95% |
+| Admin Login Success | 1000 | 60s | Included Above | ~1.26s | 98% |
+| Dockerized Deployment Test | 1000 | 60s | ~550 req/s | ~1.26s | Stable |
+| Sustained Concurrent Sessions | 1000 VUs | 60s | Stable Throughput | Minor Slowdown After ~700 VUs | System Responsive |
+
+---
+
+# ⚡ Scaling Behavior
+
+| Concurrent Users | System Behavior |
+|---|---|
+| 1–200 Users | Very stable with low latency |
+| 200–500 Users | Stable under heavy authenticated traffic |
+| 500–700 Users | Minor latency increase, still responsive |
+| 700–1000 Users | Bottlenecks begin appearing in bcrypt hashing and Docker networking |
+| 1000+ Users | Temporary connection refusals and increased latency spikes |
+
+---
+
+# 🧠 Bottleneck Analysis
+
+| Bottleneck | Cause |
+|---|---|
+| bcrypt hashing | CPU-intensive password hashing during signup/login |
+| Docker Desktop networking | Windows Docker bridge overhead under high concurrency |
+| Single-machine MySQL container | Concurrent write pressure |
+| TCP/socket exhaustion | Windows localhost socket limitations during extreme load |
+
+---
+
+# 🐧 Linux Deployment Expectations
+
+The benchmarks above were executed on:
+
+- Windows
+- Docker Desktop
+- Localhost networking
+- Single machine setup
+
+Deploying on Linux infrastructure is expected to significantly improve performance.
+
+---
+
+## Expected Linux Improvements
+
+| Optimization | Expected Improvement |
+|---|---|
+| Native Linux networking | Lower latency |
+| Gunicorn + multiple workers | Higher throughput |
+| Dedicated database instance | Better concurrent write handling |
+| Reverse proxy (Nginx) | Improved connection management |
+| Production-grade VPS hardware | Better bcrypt performance |
+
+---
+
+# 🏗️ Stability Summary
+
+| Metric | Result |
+|---|---|
+| Total Requests Processed | 35,020 |
+| Maximum Concurrent Virtual Users Tested | 1000 |
+| Interrupted Iterations | 0 |
+| Full System Crashes | 0 |
+| Database Failures | None Observed |
+| Event Loop Failures | None Observed |
+| Container Stability | Stable Throughout Sustained Load |
+
+---
+
+# 🧪 k6 Benchmarking
+
+Run load tests:
+
+```bash
+k6 run load_test.js
+```
+
+Benchmark suite includes:
+
+- Admin signup/login
+- JWT generation
+- Course creation
+- Student creation
+- Faculty creation
+- Enrollment creation
+- Authenticated GET endpoints
+- Concurrent database writes
+- Protected role-based routes
+
+---
+
+# 🔥 Production Deployment
+
+Recommended production command:
+
+```bash
+gunicorn backend.main:app \
+  -k uvicorn.workers.UvicornWorker \
+  -w 4 \
+  -b 0.0.0.0:8000
+```
+
+---
+
+## Recommended Production Stack
+
+- Linux VPS
+- Gunicorn + Uvicorn workers
+- Nginx reverse proxy
+- Docker Compose
+- Managed MySQL/PostgreSQL
+- Redis caching (future improvement)
+
+---
+
+# 🧠 Architecture Highlights
+
+- Clean architecture:
+  ```text
+  routes → services → queries → models
+  ```
+
+- Dependency Injection using FastAPI
+- Async database operations
+- Stateless JWT authentication
+- Foreign key constraints
+- Service-layer business logic
+- Async test isolation
+- Dockerized infrastructure
+
+---
+
+# 📦 Core Dependencies
+
+```text
+fastapi
+sqlalchemy
+aiomysql
+uvicorn
+pydantic
+python-jose
+passlib
+bcrypt
+pytest
+pytest-asyncio
+httpx
+slowapi
+docker
+```
+
+---
+
+# 📌 Future Improvements
+
 - ⚛️ React frontend migration
 - 📊 Admin analytics dashboard
 - 📧 Email notifications
+- ☁️ Cloud deployment
+- 🔄 Refresh tokens
+- 📈 Prometheus + Grafana monitoring
+- 🧠 Redis caching
+- 🔔 WebSocket notifications
 
 ---
 
-## 📄 License
+# 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 👤 Author
-
-**Dhruv** — [@Dhruv-Cmds](https://github.com/Dhruv-Cmds)
+Licensed under the MIT License.
 
 ---
 
-## ⭐ Acknowledgment
+# 👤 Author
 
-This project was built as part of backend development practice and demonstrates real-world API design, authentication, role-based access control, and testing workflows using modern Python tooling.
+**Dhruv**  
+GitHub: https://github.com/Dhruv-Cmds
+
+---
+
+# ⭐ Acknowledgment
+
+This project was built as a real-world backend engineering practice project demonstrating:
+
+- API architecture
+- JWT authentication
+- RBAC authorization
+- async FastAPI patterns
+- Dockerized deployment
+- database integration
+- load testing
+- production-style backend design
+
+---
