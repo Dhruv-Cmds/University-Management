@@ -1,96 +1,148 @@
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
 from backend.models import Student, Admin, Faculty
 from backend.schemas import StudentCreate
 
-#  create student
-def create_student(db:Session, student_data: StudentCreate):
 
-    existing_email_phone  = db.query(Student).filter(
-        (Student.email == student_data.email) |
-        (Student.phone_number == student_data.phone_number)).first()
+#  create student
+async def create_student(db: AsyncSession, student_data: StudentCreate):
+
+    result = await db.execute(
+        select(Student).where(
+            (Student.email == student_data.email) |
+            (Student.phone_number == student_data.phone_number)
+        )
+    )
+
+    existing_email_phone = result.scalar_one_or_none()
 
     if existing_email_phone:
-        raise ValueError("Student with this email or phone already exists")
-    
 
-    existing_faculty = db.query(Faculty).filter(
-        (Faculty.phone_number == student_data.phone_number) |
-        (Faculty.email == student_data.email)).first()
+        raise HTTPException(
+            status_code=400,
+            detail="Student with this email or phone already exists"
+        )
+
+    result = await db.execute(
+        select(Faculty).where(
+            (Faculty.phone_number == student_data.phone_number) |
+            (Faculty.email == student_data.email)
+        )
+    )
+
+    existing_faculty = result.scalar_one_or_none()
 
     if existing_faculty:
-        raise ValueError("Phone number or email already used by faculty")
-    
-    
-    existing_admin = db.query(Admin).filter(Admin.email == student_data.email).first()
-    
+
+        raise HTTPException(
+            status_code=400,
+            detail="Phone number or email already used by faculty"
+        )
+
+    result = await db.execute(
+        select(Admin).where(Admin.email == student_data.email)
+    )
+
+    existing_admin = result.scalar_one_or_none()
+
     if existing_admin:
-        raise ValueError("Email already used by a admin")
-    
 
-    new_student = Student (
+        raise HTTPException(
+            status_code=400,
+            detail="Email already used by an admin"
+        )
 
-        student_name = student_data.student_name,
-        email = student_data.email,
-        phone_number = student_data.phone_number,
-        gender = student_data.gender
+    new_student = Student(
+
+        student_name=student_data.student_name,
+        email=student_data.email,
+        phone_number=student_data.phone_number,
+        gender=student_data.gender
     )
 
     try:
 
         db.add(new_student)
 
-        db.commit()
+        await db.commit()
 
-        db.refresh(new_student)
-    
-    except Exception as e:
+        await db.refresh(new_student)
 
-        db.rollback()
+    except Exception:
 
-        raise e
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return new_student
 
 
 #  get all student
-def get_all_students(db:Session):
+async def get_all_students(db: AsyncSession):
 
-    return db.query(Student).all()
+    result = await db.execute(
+        select(Student)
+    )
+
+    return result.scalars().all()
 
 
 #  select specific id to check student
-def get_student_by_id(db:Session, student_id: int):
+async def get_student_by_id(db: AsyncSession, student_id: int):
 
-    student = db.query(Student).filter(
-        Student.id == student_id).first()
+    result = await db.execute(
+        select(Student)
+        .where(Student.id == student_id)
+    )
+
+    student = result.scalar_one_or_none()
 
     if not student:
 
-        raise ValueError ("No student found")
-    
+        raise HTTPException(
+            status_code=404,
+            detail="No student found"
+        )
+
     return student
 
 
 # delete student
-def delete_student (db:Session, student_id: int):
+async def delete_student(db: AsyncSession, student_id: int):
 
-    student = db.query(Student).filter(
-        Student.id == student_id).first()
+    result = await db.execute(
+        select(Student)
+        .where(Student.id == student_id)
+    )
+
+    student = result.scalar_one_or_none()
 
     if not student:
 
-        raise ValueError ("No student found")
-    
+        raise HTTPException(
+            status_code=404,
+            detail="No student found"
+        )
 
     try:
-    
-        db.delete(student)
 
-        db.commit()
-    
-    except Exception as e:
+        await db.delete(student)
 
-        db.rollback()
-        raise e
+        await db.commit()
+
+    except Exception:
+
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return student
