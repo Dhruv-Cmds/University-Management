@@ -1,12 +1,25 @@
-from backend.routes import courses, enrollements, faculty, students
+from backend.routes import courses, enrollments, faculty, students
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-import time
-from backend.db import engine, Base 
+from fastapi.responses import JSONResponse
 
+from contextlib import asynccontextmanager
+
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.errors import RateLimitExceeded
+
+from backend.db import engine, Base
 from backend.core import limiter
 from backend.routes import auth
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
 
 app = FastAPI(
     title="FastAPI College Management System",
@@ -18,7 +31,7 @@ app = FastAPI(
         "for protected endpoints based on admin roles."
     ),
     version="1.0.0",
-    lifespan=None,
+    lifespan=lifespan,
     openapi_tags=[
         {
             "name": "Admin",
@@ -43,12 +56,18 @@ app = FastAPI(
     ]
 )
 
-@app.on_event("startup")
-def on_startup():
-    time.sleep(10) 
-    Base.metadata.create_all(bind=engine)
-
 app.state.limiter = limiter
+
+app.add_middleware(SlowAPIMiddleware)
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too many requests, slow down"}
+    )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,6 +79,6 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(courses.router)
-app.include_router(enrollements.router)
+app.include_router(enrollments.router)
 app.include_router(faculty.router)
 app.include_router(students.router)
