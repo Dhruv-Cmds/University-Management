@@ -5,7 +5,8 @@ from backend.schemas import AdminLogin, AdminCreate, AdminResponse
 from backend.models import AdminRole
 
 from backend.services import admin_service, login_admin
-from backend.dependencies import get_db, require_role
+from backend.dependencies import require_role
+from backend.dependencies.db import get_db
 
 from backend.core import limiter
 
@@ -38,7 +39,7 @@ async def login(
     admin_data: AdminLogin,
     db: AsyncSession = Depends(get_db)):
 
-    return login_admin(
+    return await login_admin(
         db,
         admin_data.email,
         admin_data.password

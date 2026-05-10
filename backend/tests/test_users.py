@@ -1,23 +1,31 @@
-from fastapi.testclient import TestClient
-from backend.main import app
+import pytest
 import random
 
-client = TestClient(app)
 
-
-def test_create_user_duplicate_email():
+@pytest.mark.asyncio
+async def test_create_user_duplicate_email(client):
     email = f"user{random.randint(1,100000)}@test.com"
 
-    client.post("/auth/signup", json={
-        "email": email,
-        "password": "123456",
-        "role": "admin"
-    })
+    first_response = await client.post(
+        "/admin/signup",
+        json={
+            "email": email,
+            "password": "123456",
+            "role": "admin"
+        }
+    )
 
-    response = client.post("/auth/signup", json={
-        "email": email,
-        "password": "123456",
-        "role": "admin"
-    })
+    print(first_response.json())
+
+    response = await client.post(
+        "/admin/signup",
+        json={
+            "email": email,
+            "password": "123456",
+            "role": "admin"
+        }
+    )
+
+    print(response.json())
 
     assert response.status_code == 400

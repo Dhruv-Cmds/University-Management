@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.services import course_service
 from backend.schemas import CourseCreate, CourseResponse
 
-from backend.dependencies import get_db, require_role
+from backend.dependencies import require_role
+from backend.dependencies.db import get_db
 from backend.models import AdminRole
 
 from backend.core import limiter

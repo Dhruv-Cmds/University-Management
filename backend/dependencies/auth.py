@@ -5,7 +5,7 @@ from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from backend.dependencies import get_db
+from backend.dependencies.db import get_db
 from backend.models import Admin, AdminRole
 from backend.models import Faculty
 from backend.core import SECRET_KEY, ALGORITHM

@@ -58,7 +58,11 @@ app = FastAPI(
 
 app.state.limiter = limiter
 
-app.add_middleware(SlowAPIMiddleware)
+# app.add_middleware(SlowAPIMiddleware)
+import os
+
+if os.getenv("TESTING") != "true":
+    app.add_middleware(SlowAPIMiddleware)
 
 
 @app.exception_handler(RateLimitExceeded)
