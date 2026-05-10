@@ -10,13 +10,14 @@ from backend.models import Admin, AdminRole
 from backend.models import Faculty
 from backend.core import SECRET_KEY, ALGORITHM
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=True)
 
 
 async def get_current_admin(
-                    credentials: HTTPAuthorizationCredentials = Depends(security),
-                    db: AsyncSession = Depends(get_db)
-                ):
+        credentials: HTTPAuthorizationCredentials = Depends(security),
+        db: AsyncSession = Depends(get_db)
+    ):
+    
     token = credentials.credentials
 
     try:
