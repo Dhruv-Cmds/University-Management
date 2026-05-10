@@ -1,85 +1,126 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models import Enrollment
 from backend.schemas import EnrollmentCreate
 
+from fastapi import HTTPException
+
+from sqlalchemy import select
+
 
 #  create enrollment
-def create_enrollment(
-                    db:Session, 
-                    enrollment_data: EnrollmentCreate
-                    ):
-    
-    existing = db.query(Enrollment).filter(
-            (Enrollment.student_id == enrollment_data.student_id) |
-            (Enrollment.course_id == enrollment_data.course_id)).first()
+async def create_enrollment(
+        db: AsyncSession,
+        enrollment_data: EnrollmentCreate
+    ):
+
+    result = await db.execute(
+        select(Enrollment)
+        .where(
+            (Enrollment.student_id == enrollment_data.student_id) &
+            (Enrollment.course_id == enrollment_data.course_id)
+        )
+    )
+
+    existing = result.scalar_one_or_none()
 
     if existing:
 
-        raise ValueError("Student has already submitted data and is enrolled in this course.")
-    
-    new_enrollment = Enrollment (
-        student_id = enrollment_data.student_id,
-        course_id = enrollment_data.course_id
+        raise HTTPException(
+            status_code=400,
+            detail="Student is already enrolled in this course."
+        )
+
+    new_enrollment = Enrollment(
+        student_id=enrollment_data.student_id,
+        course_id=enrollment_data.course_id
     )
 
     try:
 
         db.add(new_enrollment)
 
-        db.commit()
+        await db.commit()
 
-        db.refresh(new_enrollment)
+        await db.refresh(new_enrollment)
 
-    except Exception as e:
+    except Exception:
 
-        db.rollback()
-        raise e
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return new_enrollment
-    
+
 
 #  get all enrollment
-def get_all_enrollments(db:Session):
+async def get_all_enrollments(db: AsyncSession):
 
-    return db.query(Enrollment).all()
+    result = await db.execute(
+        select(Enrollment)
+    )
+
+    return result.scalars().all()
 
 
 #  select specific id to check enrollment
-def get_enrollment_by_id(
-                        db:Session, 
-                        enrollment_id:int
-                        ):
-    
-    enrollment = db.query(Enrollment).filter(
-        Enrollment.id == enrollment_id).first()
+async def get_enrollment_by_id(
+        db: AsyncSession,
+        enrollment_id: int
+    ):
+
+    result = await db.execute(
+        select(Enrollment)
+        .where(Enrollment.id == enrollment_id)
+    )
+
+    enrollment = result.scalar_one_or_none()
 
     if not enrollment:
 
-        raise ValueError ("Enrollment not found")
-    
+        raise HTTPException(
+            status_code=404,
+            detail="Enrollment not found"
+        )
+
     return enrollment
 
+
 # delete enrollment
-def delete_enrollment(
-                db:Session, 
-                enrollment_id:int
-                ):
-    
-   enrollment = db.query(Enrollment).filter(
-       Enrollment.id == enrollment_id).first() 
+async def delete_enrollment(
+        db: AsyncSession,
+        enrollment_id: int
+    ):
 
-   if not enrollment:
-       
-       raise ValueError ("Enrollment not found")
-   
-   try:
-        db.delete(enrollment)
+    result = await db.execute(
+        select(Enrollment)
+        .where(Enrollment.id == enrollment_id)
+    )
 
-        db.commit()
+    enrollment = result.scalar_one_or_none()
 
-   except Exception as e:
-       
-       db.rollback()
-       raise e
+    if not enrollment:
 
-   return enrollment
+        raise HTTPException(
+            status_code=404,
+            detail="Enrollment not found"
+        )
+
+    try:
+
+        await db.delete(enrollment)
+
+        await db.commit()
+
+    except Exception:
+
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
+
+    return enrollment
