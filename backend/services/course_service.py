@@ -1,67 +1,113 @@
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
 from backend.models import Course
 from backend.schemas import CourseCreate
 
 
 #  create course
-def create_course(db:Session, course_data: CourseCreate):
+async def create_course(db: AsyncSession, course_data: CourseCreate):
 
-    existing = db.query(Course).filter(
-        Course.course_name == course_data.course_name).first()
-    
+    result = await db.execute(
+        select(Course)
+        .where(Course.course_name == course_data.course_name)
+    )
+
+    existing = result.scalar_one_or_none()
+
     if existing:
 
-        raise ValueError ("Course already exists")
+        raise HTTPException(
+            status_code=400,
+            detail="Course already exists"
+        )
 
     new_course = Course(
-        course_name = course_data.course_name
+        course_name=course_data.course_name
     )
 
     try:
 
         db.add(new_course)
-        db.commit()
-        db.refresh(new_course)
 
-    except Exception as e:
+        await db.commit()
 
-        db.rollback()
-        raise e
+        await db.refresh(new_course)
+
+    except Exception:
+
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return new_course
 
-#  get all courses
-def get_all_courses(db:Session):
 
-    return db.query(Course).all()
+#  get all courses
+async def get_all_courses(db: AsyncSession):
+
+    result = await db.execute(
+        select(Course)
+    )
+
+    return result.scalars().all()
+
 
 #  select specific id to check course
-def get_course_by_id(db:Session, course_id: int):
+async def get_course_by_id(db: AsyncSession, course_id: int):
 
-    course = db.query(Course).filter(Course.id == course_id).first()
+    result = await db.execute(
+        select(Course)
+        .where(Course.id == course_id)
+    )
+
+    course = result.scalar_one_or_none()
 
     if not course:
-        raise ValueError ("Course not found")
-    
+
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found"
+        )
+
     return course
 
-# delete course
-def delete_course(db:Session, course_id: int):
 
-    course = db.query(Course).filter(Course.id == course_id).first()
+# delete course
+async def delete_course(db: AsyncSession, course_id: int):
+
+    result = await db.execute(
+        select(Course)
+        .where(Course.id == course_id)
+    )
+
+    course = result.scalar_one_or_none()
 
     if not course:
-        raise ValueError ("Course not found")
-    
+
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found"
+        )
+
     try:
-    
-        db.delete(course)
 
-        db.commit()
+        await db.delete(course)
 
-    except Exception as e:
-        
-        db.rollback()
-        raise e
+        await db.commit()
+
+    except Exception:
+
+        await db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail="Database error"
+        )
 
     return course
