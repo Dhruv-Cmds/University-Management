@@ -1,31 +1,42 @@
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models import Admin
 from backend.core.security import verify_password, create_access_token
 
 
-def authenticate_admin(db: Session, email: str, password: str):
+async def authenticate_admin(db: AsyncSession, email: str, password: str):
 
     # Password in DB is hashed (not plain text), so direct comparison won't work.
     # Instead of User.password == password, use verify_password()
     # which hashes the input and compares it securely.
     
-    admin = db.query(Admin).filter(Admin.email == email).first()
+    result = await db.execute(
+        select(Admin)
+        .where(Admin.email == email)
+    )
+
+    admin = result.scalar_one_or_none()
 
     if not admin:
-        raise ValueError("Invalid email or password")
+        raise HTTPException (
+            status_code=400,
+            detail="Invalid email or password"
+        )
 
     if not verify_password(password, admin.password):
-        raise ValueError("Invalid email or password")
+        raise HTTPException (
+            status_code=400,
+            detail="Invalid email or password"
+        )
 
     return admin
 
 
-def login_admin(db: Session, email: str, password: str):
+async def login_admin(db: AsyncSession, email: str, password: str):
     
-    admin = authenticate_admin(db, email, password)
-
-    if not admin:
-        raise ValueError("Invalid email or password")
+    admin = await authenticate_admin(db, email, password)
 
     token = create_access_token({
         "sub": str(admin.id),
