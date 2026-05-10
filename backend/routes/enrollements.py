@@ -12,47 +12,69 @@ from backend.core import limiter
 router = APIRouter(prefix="/enrollments", tags=["Enrollments"])
 
 # only what’s in EnrollmentResponse is returned.
-@router.post("/", response_model = EnrollmentResponse)
+@router.post(
+    "/", 
+    response_model=EnrollmentResponse,
+    summary="Create enrollment",
+    description="Create a new enrollment for a student in a course."
+)
 @limiter.limit("3/second")
 async def create_enrollment(
         request: Request,
         enrollment: EnrollmentCreate,
-        db:AsyncSession = Depends(get_db),
+        db: AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
     ):
 
     # create_course not belongs to this function it's belongs to sevice folder
     return await enrollment_service.create_enrollment(db, enrollment)
     
-@router.get("/", response_model= list[EnrollmentResponse])
+
+@router.get(
+    "/", 
+    response_model=list[EnrollmentResponse],
+    summary="Get all enrollments",
+    description="Retrieve a list of all enrollments."
+)
 @limiter.limit("3/second")
 async def get_all_enrollments(
         request: Request,
-        db:AsyncSession = Depends(get_db),
+        db: AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
     ):
 
 
     return await enrollment_service.get_all_enrollments(db)
     
-@router.get("/{enrollment_id}", response_model= EnrollmentResponse)
+
+@router.get(
+    "/{enrollment_id}", 
+    response_model=EnrollmentResponse,
+    summary="Get enrollment by ID",
+    description="Retrieve details of a specific enrollment using its ID."
+)
 @limiter.limit("3/second")
 async def get_enrollment_by_id(
         request: Request,
         enrollment_id: int,
-        db:AsyncSession = Depends(get_db),
+        db: AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
     ):
 
     return await enrollment_service.get_enrollment_by_id(db, enrollment_id)
     
     
-@router.delete("/{enrollment_id}", response_model= EnrollmentResponse)
+@router.delete(
+    "/{enrollment_id}", 
+    response_model=EnrollmentResponse,
+    summary="Delete enrollment",
+    description="Delete a specific enrollment using the enrollment ID."
+)
 @limiter.limit("2/second")
 async def delete_enrollment(
         request: Request,
         enrollment_id: int,
-        db:AsyncSession = Depends(get_db),
+        db: AsyncSession = Depends(get_db),
         current_user = Depends(require_role([AdminRole.admin, AdminRole.faculty]))
     ):
 
