@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:8002";
+const BASE_URL = "http://ums.dhruvcore.com/api";
 
 console.log("APP JS LOADED 🚀");
 
