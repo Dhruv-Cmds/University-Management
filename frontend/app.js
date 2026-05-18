@@ -27,7 +27,7 @@ async function signup() {
     });
 
     const data = await res.json();
-    console.log("SIGNUP RESPONSE:", data);
+    console.log(JSON.stringify(data, null, 2));
 
     if (res.ok) {
         showMessage("Signup success");
