@@ -184,10 +184,6 @@ async function enroll() {
 
 // ================= EVENT BINDING (IMPORTANT) =================
 document.getElementById("signupBtn").addEventListener("click", signup);
-document.getElementById("loginBtn").addEventListener("click", login);
-document.getElementById("courseBtn").addEventListener("click", createCourse);
-document.getElementById("studentBtn").addEventListener("click", createStudent);
-document.getElementById("facultyBtn").addEventListener("click", createFaculty);
-document.getElementById("enrollBtn").addEventListener("click", enroll);
+document.getElementById("loginBtn").addEventListener("click", login);;
 
 console.log("EVENTS BOUND ✅");
