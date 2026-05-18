@@ -161,7 +161,7 @@ async function enroll() {
         return;
     }
 
-    const res = await fetch(`${BASE_URL}/enrollment/`, {
+    const res = await fetch(`${BASE_URL}/enrollments/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
