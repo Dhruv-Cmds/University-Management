@@ -1,4 +1,4 @@
-const BASE_URL = "http://ums.dhruvcore.com/api";
+const BASE_URL = "https://ums.dhruvcore.com/api";
 
 console.log("APP JS LOADED 🚀");
 
