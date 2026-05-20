@@ -229,6 +229,82 @@ Authorization: Bearer <your_token>
 
 ---
 
+---
+
+# 🌐 VPS Production Deployment
+
+This project is deployed on a Linux VPS using Docker, Nginx, HTTPS, and a production-style reverse proxy setup.
+
+## Infrastructure
+
+- Hostinger VPS
+- Ubuntu 24.04
+- Dockerized FastAPI backend
+- Dockerized MySQL database
+- Nginx reverse proxy
+- HTTPS enabled with Certbot + Let's Encrypt
+- Domain-based deployment
+
+---
+
+## Production Stack
+
+### Backend
+
+- FastAPI
+- Async SQLAlchemy
+- JWT Authentication
+- Role-Based Access Control
+- Gunicorn + Uvicorn workers
+- Dockerized API container
+
+### Frontend
+
+- HTML/CSS/JavaScript dashboard
+- Served behind Nginx
+- Connected to protected backend APIs using JWT
+
+### Database
+
+- MySQL 8
+- Dedicated Docker container
+- Persistent Docker volume
+- Separate test database support
+
+---
+
+## Production Security
+
+- HTTPS enforced
+- SSH key-based VPS access
+- UFW firewall configured
+- JWT-protected routes
+- bcrypt password hashing
+- Nginx reverse proxy isolation
+- Rate limiting with SlowAPI
+- Environment variables separated from source code
+
+---
+
+## Deployment Flow
+
+```text
+git push origin main
+        ↓
+SSH into VPS
+        ↓
+git pull
+        ↓
+docker compose up --build -d
+        ↓
+Nginx routes traffic to FastAPI container
+        ↓
+HTTPS served through Let's Encrypt
+
+```
+
+---
+
 # 📡 API Endpoints
 
 ---
@@ -349,6 +425,62 @@ The API was stress-tested using **k6** against a fully containerized environment
 | 1000+ Users | Temporary connection refusals and increased latency spikes |
 
 ---
+
+## Linux VPS Production Testing
+
+### VPS Specifications
+
+- 2 vCPU
+- 8GB RAM
+- Ubuntu 24.04
+- Dockerized environment
+- FastAPI backend
+- MySQL database
+- Nginx reverse proxy
+- HTTPS enabled
+
+### Tested Workflows
+
+- Admin signup
+- Admin login
+- Course creation
+- Student creation
+- Faculty creation
+- Enrollment creation
+- Authenticated GET endpoints
+- Concurrent database writes
+- JWT-protected API access
+- Role-based protected routes
+
+### Production Results
+
+- Tested up to 1000 virtual users
+- Stable behavior observed under normal production-style load
+- Authenticated API flows completed successfully
+- Database remained operational during load testing
+- Containers stayed responsive during sustained traffic
+- No catastrophic crashes observed
+
+### Stable Range
+
+- ~100–300 realistic concurrent active users
+
+### Stress Range
+
+- ~300–700 concurrent virtual users
+
+### Overload Behavior
+
+At aggressive loads beyond 700 concurrent VUs:
+
+- Increased latency observed
+- Higher response times on write-heavy endpoints
+- bcrypt hashing became a visible bottleneck during login/signup
+- MySQL write pressure increased
+- Some failed/slow requests appeared under extreme load
+- No full system crash observed
+- Services remained operational
+
 
 # 🧠 Bottleneck Analysis
 
