@@ -1,6 +1,6 @@
 # 🎓 University Management System API
 
-A fully functional **full-stack University Management System** built with **FastAPI**, **MySQL**, and **Docker**, featuring JWT authentication, role-based access control, async database operations, and production-style API architecture.
+A full-stack **University Management System** built with **FastAPI**, **MySQL**, and **Docker**, featuring JWT authentication, role-based access control, async database operations, load testing, and VPS production deployment.
 
 The project includes a lightweight frontend dashboard built with **HTML/CSS/JavaScript** for testing and interacting with the API.
 
@@ -8,25 +8,49 @@ The project includes a lightweight frontend dashboard built with **HTML/CSS/Java
 
 # 🚀 Features
 
-- 🔐 JWT Authentication (Signup & Login)
-- 🛡️ Role-Based Access Control (Admin, Faculty)
-- ⚡ Async FastAPI + Async SQLAlchemy
-- 🐳 Dockerized Backend & Database
-- 📚 Course Management
-- 👨‍🎓 Student Management
-- 👩‍🏫 Faculty Management
-- 🔗 Enrollment System
-- 🧪 Full Async Pytest Suite
-- 📈 k6 Load Testing & Benchmarking
-- 🗄️ MySQL Database Integration
-- 📄 Automatic Swagger/OpenAPI Documentation
-- 🔒 Password Hashing with bcrypt
-- 🚦 Rate Limiting using SlowAPI
+* 🔐 JWT Authentication
+* 🛡️ Role-Based Access Control
+* ⚡ Async FastAPI + Async SQLAlchemy
+* 🐳 Dockerized Backend & Database
+* 📚 Course Management
+* 👨‍🎓 Student Management
+* 👩‍🏫 Faculty Management
+* 🔗 Enrollment System
+* 🧪 Full Async Pytest Suite
+* 📈 k6 Load Testing & Benchmarking
+* 🌐 VPS Production Deployment
+* 🔒 HTTPS + Nginx Reverse Proxy
+* 🚦 Rate Limiting using SlowAPI
 
 ---
 
 # 🌐 Live Demo
-Frontend: https://ums.dhruvcore.com/
+
+Frontend:
+
+```text
+https://ums.dhruvcore.com/
+```
+
+---
+
+# 🏗️ Tech Stack
+
+| Layer            | Technology              |
+| ---------------- | ----------------------- |
+| Backend          | FastAPI                 |
+| Database         | MySQL                   |
+| ORM              | SQLAlchemy 2.x          |
+| Async Driver     | aiomysql                |
+| Validation       | Pydantic                |
+| Authentication   | JWT                     |
+| Password Hashing | bcrypt + passlib        |
+| Testing          | Pytest + pytest-asyncio |
+| Load Testing     | k6                      |
+| Server           | Uvicorn / Gunicorn      |
+| Containerization | Docker + Docker Compose |
+| Reverse Proxy    | Nginx                   |
+| SSL              | Certbot + Let's Encrypt |
 
 ---
 
@@ -34,49 +58,20 @@ Frontend: https://ums.dhruvcore.com/
 
 A simple frontend dashboard is included using:
 
-- HTML
-- CSS
-- JavaScript
+* HTML
+* CSS
+* JavaScript
 
-It provides a lightweight UI to interact with the backend API.
+## Frontend Features
 
----
+* Signup & Login
+* Create Courses
+* Create Students
+* Create Faculty
+* Create Enrollments
+* JWT Protected API Calls
 
-## ✨ Frontend Features
-
-- 🔐 Signup & Login
-- 📚 Create Courses
-- 👨‍🎓 Create Students
-- 👩‍🏫 Create Faculty
-- 🔗 Create Enrollments
-- 🛡️ JWT Protected API Calls
-
----
-
-## ⚠️ Frontend Notes
-
-- This frontend is a **basic API interaction dashboard**
-- It is **not intended as a production UI**
-- React frontend migration is planned
-- Authorization logic is handled entirely by the backend
-
----
-
-# 🏗️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Backend | FastAPI |
-| Database | MySQL |
-| ORM | SQLAlchemy 2.x |
-| Async Driver | aiomysql |
-| Validation | Pydantic |
-| Authentication | JWT (python-jose) |
-| Password Hashing | bcrypt + passlib |
-| Testing | Pytest + pytest-asyncio |
-| Load Testing | k6 |
-| Server | Uvicorn |
-| Containerization | Docker + Docker Compose |
+> This frontend is a basic API interaction dashboard, not a production UI.
 
 ---
 
@@ -86,22 +81,20 @@ It provides a lightweight UI to interact with the backend API.
 University-Management/
 │
 ├── backend/
-│   ├── core/                # Config, JWT, security, limiter
-│   ├── db/                  # Database engine & session
-│   ├── dependencies/        # FastAPI dependencies
-│   ├── migrations/          # Alembic migrations
-│   ├── models/              # SQLAlchemy ORM models
-│   ├── queries/             # Database query layer
-│   ├── routes/              # API routes
-│   ├── schemas/             # Pydantic schemas
-│   ├── services/            # Business logic layer
-│   ├── tests/               # Async pytest suite
-│   └── main.py              # FastAPI entrypoint
+│   ├── core/
+│   ├── db/
+│   ├── dependencies/
+│   ├── migrations/
+│   ├── models/
+│   ├── queries/
+│   ├── routes/
+│   ├── schemas/
+│   ├── services/
+│   ├── tests/
+│   └── main.py
 │
 ├── frontend/
-│
 ├── docker/
-│
 ├── requirements.txt
 ├── docker-compose.yml
 ├── README.md
@@ -112,17 +105,14 @@ University-Management/
 
 # ⚙️ Local Setup
 
-## 1️⃣ Clone Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/Dhruv-Cmds/University-Management.git
-
 cd University-Management
 ```
 
----
-
-## 2️⃣ Create Virtual Environment
+## Create Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -140,17 +130,13 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
----
-
-## 3️⃣ Install Dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## 4️⃣ Configure Environment Variables
+## Configure Environment Variables
 
 Create a `.env` file:
 
@@ -159,26 +145,22 @@ COMPOSE_PROJECT_NAME=ums-app
 
 DB_NAME=ums
 TEST_DB_NAME=ums_test
-DB_USER= ums_user
+DB_USER=ums_user
 DB_PASSWORD=ums_password
 MYSQL_ROOT_PASSWORD=ums_password
 
-SECRET_KEY=yourkey
+SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 ```
 
----
-
-## 5️⃣ Create Database
+## Create Database
 
 ```sql
 CREATE DATABASE ums;
 ```
 
----
-
-## 6️⃣ Run Backend
+## Run Backend
 
 ```bash
 uvicorn backend.main:app --reload
@@ -200,18 +182,14 @@ http://127.0.0.1:8000/docs
 docker compose up --build
 ```
 
----
-
 ## Services
 
-| Service | Port |
-|---|---|
+| Service     | Port   |
+| ----------- | ------ |
 | FastAPI API | `8002` |
-| MySQL | `3009` |
+| MySQL       | `3009` |
 
----
-
-## API Docs
+API Docs:
 
 ```text
 http://localhost:8002/docs
@@ -229,62 +207,54 @@ Authorization: Bearer <your_token>
 
 ---
 
----
-
 # 🌐 VPS Production Deployment
 
 This project is deployed on a Linux VPS using Docker, Nginx, HTTPS, and a production-style reverse proxy setup.
 
 ## Infrastructure
 
-- Hostinger VPS
-- Ubuntu 24.04
-- Dockerized FastAPI backend
-- Dockerized MySQL database
-- Nginx reverse proxy
-- HTTPS enabled with Certbot + Let's Encrypt
-- Domain-based deployment
-
----
+* Hostinger VPS
+* Ubuntu 24.04
+* Dockerized FastAPI backend
+* Dockerized MySQL database
+* Nginx reverse proxy
+* HTTPS enabled with Certbot + Let's Encrypt
+* Domain-based deployment
 
 ## Production Stack
 
 ### Backend
 
-- FastAPI
-- Async SQLAlchemy
-- JWT Authentication
-- Role-Based Access Control
-- Gunicorn + Uvicorn workers
-- Dockerized API container
+* FastAPI
+* Async SQLAlchemy
+* JWT Authentication
+* Role-Based Access Control
+* Gunicorn + Uvicorn workers
+* Dockerized API container
 
 ### Frontend
 
-- HTML/CSS/JavaScript dashboard
-- Served behind Nginx
-- Connected to protected backend APIs using JWT
+* HTML/CSS/JavaScript dashboard
+* Served behind Nginx
+* Connected to protected backend APIs using JWT
 
 ### Database
 
-- MySQL 8
-- Dedicated Docker container
-- Persistent Docker volume
-- Separate test database support
-
----
+* MySQL 8
+* Dedicated Docker container
+* Persistent Docker volume
+* Separate test database support
 
 ## Production Security
 
-- HTTPS enforced
-- SSH key-based VPS access
-- UFW firewall configured
-- JWT-protected routes
-- bcrypt password hashing
-- Nginx reverse proxy isolation
-- Rate limiting with SlowAPI
-- Environment variables separated from source code
-
----
+* HTTPS enforced
+* SSH key-based VPS access
+* UFW firewall configured
+* JWT-protected routes
+* bcrypt password hashing
+* Nginx reverse proxy isolation
+* Rate limiting with SlowAPI
+* Environment variables separated from source code
 
 ## Deployment Flow
 
@@ -300,72 +270,61 @@ docker compose up --build -d
 Nginx routes traffic to FastAPI container
         ↓
 HTTPS served through Let's Encrypt
-
 ```
 
 ---
 
 # 📡 API Endpoints
 
----
+## Admin — `/admin`
 
-## 🔑 Admin — `/admin`
+| Method | Endpoint            | Auth | Description           |
+| ------ | ------------------- | ---- | --------------------- |
+| POST   | `/admin/signup`     | ❌    | Register admin        |
+| POST   | `/admin/login`      | ❌    | Login and receive JWT |
+| GET    | `/admin/`           | ✅    | List all admins       |
+| GET    | `/admin/{admin_id}` | ✅    | Get admin by ID       |
+| DELETE | `/admin/{admin_id}` | ✅    | Delete admin          |
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/admin/signup` | ❌ | Register admin |
-| POST | `/admin/login` | ❌ | Login and receive JWT |
-| GET | `/admin/` | ✅ | List all admins |
-| GET | `/admin/{admin_id}` | ✅ | Get admin by ID |
-| DELETE | `/admin/{admin_id}` | ✅ | Delete admin |
+## Courses — `/courses`
 
----
+| Method | Endpoint               | Auth | Description      |
+| ------ | ---------------------- | ---- | ---------------- |
+| POST   | `/courses/`            | ✅    | Create course    |
+| GET    | `/courses/`            | ✅    | List courses     |
+| GET    | `/courses/{course_id}` | ✅    | Get course by ID |
+| DELETE | `/courses/{course_id}` | ✅    | Delete course    |
 
-## 📚 Courses — `/courses`
+## Students — `/students`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/courses/` | ✅ | Create course |
-| GET | `/courses/` | ✅ | List courses |
-| GET | `/courses/{course_id}` | ✅ | Get course by ID |
-| DELETE | `/courses/{course_id}` | ✅ | Delete course |
+| Method | Endpoint                 | Auth | Description       |
+| ------ | ------------------------ | ---- | ----------------- |
+| POST   | `/students/`             | ✅    | Create student    |
+| GET    | `/students/`             | ✅    | List students     |
+| GET    | `/students/{student_id}` | ✅    | Get student by ID |
+| DELETE | `/students/{student_id}` | ✅    | Delete student    |
 
----
+## Faculties — `/faculties`
 
-## 👨‍🎓 Students — `/students`
+| Method | Endpoint                  | Auth | Description       |
+| ------ | ------------------------- | ---- | ----------------- |
+| POST   | `/faculties/`             | ✅    | Create faculty    |
+| GET    | `/faculties/`             | ✅    | List faculties    |
+| GET    | `/faculties/{faculty_id}` | ✅    | Get faculty by ID |
+| DELETE | `/faculties/{faculty_id}` | ✅    | Delete faculty    |
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/students/` | ✅ | Create student |
-| GET | `/students/` | ✅ | List students |
-| GET | `/students/{student_id}` | ✅ | Get student by ID |
-| DELETE | `/students/{student_id}` | ✅ | Delete student |
+## Enrollments — `/enrollments`
 
----
-
-## 👩‍🏫 Faculties — `/faculties`
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/faculties/` | ✅ | Create faculty |
-| GET | `/faculties/` | ✅ | List faculties |
-| GET | `/faculties/{faculty_id}` | ✅ | Get faculty by ID |
-| DELETE | `/faculties/{faculty_id}` | ✅ | Delete faculty |
-
----
-
-## 🔗 Enrollments — `/enrollments`
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/enrollments/` | ✅ | Create enrollment |
-| GET | `/enrollments/` | ✅ | List enrollments |
-| GET | `/enrollments/{enrollment_id}` | ✅ | Get enrollment by ID |
-| DELETE | `/enrollments/{enrollment_id}` | ✅ | Delete enrollment |
+| Method | Endpoint                       | Auth | Description          |
+| ------ | ------------------------------ | ---- | -------------------- |
+| POST   | `/enrollments/`                | ✅    | Create enrollment    |
+| GET    | `/enrollments/`                | ✅    | List enrollments     |
+| GET    | `/enrollments/{enrollment_id}` | ✅    | Get enrollment by ID |
+| DELETE | `/enrollments/{enrollment_id}` | ✅    | Delete enrollment    |
 
 ---
 
-# 🧪 Running Tests
+# 🧪 Testing
 
 Run async pytest suite:
 
@@ -373,17 +332,15 @@ Run async pytest suite:
 pytest -v
 ```
 
----
-
 ## Test Coverage Includes
 
-- JWT authentication
-- Role-based access control
-- CRUD operations
-- Database integration
-- Enrollment flow
-- Protected routes
-- Async route testing
+* JWT authentication
+* Role-based access control
+* CRUD operations
+* Database integration
+* Enrollment flow
+* Protected routes
+* Async route testing
 
 ---
 
@@ -391,144 +348,118 @@ pytest -v
 
 The API was stress-tested using **k6** against a fully containerized environment:
 
-- 🐳 FastAPI running in Docker
-- 🐬 MySQL running in Docker
-- ⚡ Async SQLAlchemy + aiomysql
-- 🔐 JWT Authentication
-- 🔑 bcrypt password hashing
-- 🛡️ Rate limiting enabled
-- 🧪 Mixed authenticated CRUD workloads
+* FastAPI running in Docker
+* MySQL running in Docker
+* Async SQLAlchemy + aiomysql
+* JWT Authentication
+* bcrypt password hashing
+* Rate limiting enabled
+* Mixed authenticated CRUD workloads
+
+## Load Testing Results
+
+| Test                          | Virtual Users | Duration | Requests/sec      | Avg Latency                   | Success Rate      |
+| ----------------------------- | ------------- | -------- | ----------------- | ----------------------------- | ----------------- |
+| Admin Auth Load Test          | 500           | 60s      | ~388 req/s        | ~781ms                        | 99.14%            |
+| Mixed API Load Test           | 1000          | 60s      | ~550 req/s        | ~1.26s                        | 97.19%            |
+| Admin Signup Success          | 1000          | 60s      | Included Above    | ~1.26s                        | 95%               |
+| Admin Login Success           | 1000          | 60s      | Included Above    | ~1.26s                        | 98%               |
+| Dockerized Deployment Test    | 1000          | 60s      | ~550 req/s        | ~1.26s                        | Stable            |
+| Sustained Concurrent Sessions | 1000 VUs      | 60s      | Stable Throughput | Minor Slowdown After ~700 VUs | System Responsive |
 
 ---
 
-# 📊 Load Testing Results
+# 🐧 Linux VPS Production Testing
 
-| Test | Virtual Users | Duration | Requests/sec | Avg Latency | Success Rate |
-|---|---|---|---|---|---|
-| Admin Auth Load Test | 500 | 60s | ~388 req/s | ~781ms | 99.14% |
-| Mixed API Load Test | 1000 | 60s | ~550 req/s | ~1.26s | 97.19% |
-| Admin Signup Success | 1000 | 60s | Included Above | ~1.26s | 95% |
-| Admin Login Success | 1000 | 60s | Included Above | ~1.26s | 98% |
-| Dockerized Deployment Test | 1000 | 60s | ~550 req/s | ~1.26s | Stable |
-| Sustained Concurrent Sessions | 1000 VUs | 60s | Stable Throughput | Minor Slowdown After ~700 VUs | System Responsive |
+## VPS Specifications
+
+* 2 vCPU
+* 8GB RAM
+* Ubuntu 24.04
+* Dockerized environment
+* FastAPI backend
+* MySQL database
+* Nginx reverse proxy
+* HTTPS enabled
+
+## Tested Workflows
+
+* Admin signup
+* Admin login
+* Course creation
+* Student creation
+* Faculty creation
+* Enrollment creation
+* Authenticated GET endpoints
+* Concurrent database writes
+* JWT-protected API access
+* Role-based protected routes
+
+## Production Results
+
+* Tested up to 1000 virtual users
+* Stable behavior observed under normal production-style load
+* Authenticated API flows completed successfully
+* Database remained operational during load testing
+* Containers stayed responsive during sustained traffic
+* No catastrophic crashes observed
+
+## Stable Range
+
+* ~100–300 realistic concurrent active users
+
+## Stress Range
+
+* ~300–700 concurrent virtual users
+
+## Overload Behavior
+
+At aggressive loads beyond 700 concurrent VUs:
+
+* Increased latency observed
+* Higher response times on write-heavy endpoints
+* bcrypt hashing became a visible bottleneck during login/signup
+* MySQL write pressure increased
+* Some failed/slow requests appeared under extreme load
+* No full system crash observed
+* Services remained operational
 
 ---
 
 # ⚡ Scaling Behavior
 
-| Concurrent Users | System Behavior |
-|---|---|
-| 1–200 Users | Very stable with low latency |
-| 200–500 Users | Stable under heavy authenticated traffic |
-| 500–700 Users | Minor latency increase, still responsive |
-| 700–1000 Users | Bottlenecks begin appearing in bcrypt hashing and Docker networking |
-| 1000+ Users | Temporary connection refusals and increased latency spikes |
+| Concurrent Users | System Behavior                                                     |
+| ---------------- | ------------------------------------------------------------------- |
+| 1–200 Users      | Very stable with low latency                                        |
+| 200–500 Users    | Stable under heavy authenticated traffic                            |
+| 500–700 Users    | Minor latency increase, still responsive                            |
+| 700–1000 Users   | Bottlenecks begin appearing in bcrypt hashing and Docker networking |
+| 1000+ Users      | Temporary connection refusals and increased latency spikes          |
 
 ---
-
-## Linux VPS Production Testing
-
-### VPS Specifications
-
-- 2 vCPU
-- 8GB RAM
-- Ubuntu 24.04
-- Dockerized environment
-- FastAPI backend
-- MySQL database
-- Nginx reverse proxy
-- HTTPS enabled
-
-### Tested Workflows
-
-- Admin signup
-- Admin login
-- Course creation
-- Student creation
-- Faculty creation
-- Enrollment creation
-- Authenticated GET endpoints
-- Concurrent database writes
-- JWT-protected API access
-- Role-based protected routes
-
-### Production Results
-
-- Tested up to 1000 virtual users
-- Stable behavior observed under normal production-style load
-- Authenticated API flows completed successfully
-- Database remained operational during load testing
-- Containers stayed responsive during sustained traffic
-- No catastrophic crashes observed
-
-### Stable Range
-
-- ~100–300 realistic concurrent active users
-
-### Stress Range
-
-- ~300–700 concurrent virtual users
-
-### Overload Behavior
-
-At aggressive loads beyond 700 concurrent VUs:
-
-- Increased latency observed
-- Higher response times on write-heavy endpoints
-- bcrypt hashing became a visible bottleneck during login/signup
-- MySQL write pressure increased
-- Some failed/slow requests appeared under extreme load
-- No full system crash observed
-- Services remained operational
-
 
 # 🧠 Bottleneck Analysis
 
-| Bottleneck | Cause |
-|---|---|
-| bcrypt hashing | CPU-intensive password hashing during signup/login |
-| Docker Desktop networking | Windows Docker bridge overhead under high concurrency |
-| Single-machine MySQL container | Concurrent write pressure |
-| TCP/socket exhaustion | Windows localhost socket limitations during extreme load |
-
----
-
-# 🐧 Linux Deployment Expectations
-
-The benchmarks above were executed on:
-
-- Windows
-- Docker Desktop
-- Localhost networking
-- Single machine setup
-
-Deploying on Linux infrastructure is expected to significantly improve performance.
-
----
-
-## Expected Linux Improvements
-
-| Optimization | Expected Improvement |
-|---|---|
-| Native Linux networking | Lower latency |
-| Gunicorn + multiple workers | Higher throughput |
-| Dedicated database instance | Better concurrent write handling |
-| Reverse proxy (Nginx) | Improved connection management |
-| Production-grade VPS hardware | Better bcrypt performance |
+| Bottleneck                     | Cause                                                    |
+| ------------------------------ | -------------------------------------------------------- |
+| bcrypt hashing                 | CPU-intensive password hashing during signup/login       |
+| Docker Desktop networking      | Windows Docker bridge overhead under high concurrency    |
+| Single-machine MySQL container | Concurrent write pressure                                |
+| TCP/socket exhaustion          | Windows localhost socket limitations during extreme load |
 
 ---
 
 # 🏗️ Stability Summary
 
-| Metric | Result |
-|---|---|
-| Total Requests Processed | 35,020 |
-| Maximum Concurrent Virtual Users Tested | 1000 |
-| Interrupted Iterations | 0 |
-| Full System Crashes | 0 |
-| Database Failures | None Observed |
-| Event Loop Failures | None Observed |
-| Container Stability | Stable Throughout Sustained Load |
+| Metric                                  | Result                           |
+| --------------------------------------- | -------------------------------- |
+| Total Requests Processed                | 35,020                           |
+| Maximum Concurrent Virtual Users Tested | 1000                             |
+| Interrupted Iterations                  | 0                                |
+| Full System Crashes                     | 0                                |
+| Database Failures                       | None Observed                    |
+| Event Loop Failures                     | None Observed                    |
+| Container Stability                     | Stable Throughout Sustained Load |
 
 ---
 
@@ -542,19 +473,19 @@ k6 run load_test.js
 
 Benchmark suite includes:
 
-- Admin signup/login
-- JWT generation
-- Course creation
-- Student creation
-- Faculty creation
-- Enrollment creation
-- Authenticated GET endpoints
-- Concurrent database writes
-- Protected role-based routes
+* Admin signup/login
+* JWT generation
+* Course creation
+* Student creation
+* Faculty creation
+* Enrollment creation
+* Authenticated GET endpoints
+* Concurrent database writes
+* Protected role-based routes
 
 ---
 
-# 🔥 Production Deployment
+# 🔥 Production Run Command
 
 Recommended production command:
 
@@ -567,31 +498,22 @@ gunicorn backend.main:app \
 
 ---
 
-## Recommended Production Stack
-
-- Linux VPS
-- Gunicorn + Uvicorn workers
-- Nginx reverse proxy
-- Docker Compose
-- Managed MySQL/PostgreSQL
-- Redis caching (future improvement)
-
----
-
 # 🧠 Architecture Highlights
 
-- Clean architecture:
-  ```text
-  routes → services → queries → models
-  ```
+* Clean architecture:
 
-- Dependency Injection using FastAPI
-- Async database operations
-- Stateless JWT authentication
-- Foreign key constraints
-- Service-layer business logic
-- Async test isolation
-- Dockerized infrastructure
+```text
+routes → services → queries → models
+```
+
+* Dependency Injection using FastAPI
+* Async database operations
+* Stateless JWT authentication
+* Foreign key constraints
+* Service-layer business logic
+* Async test isolation
+* Dockerized infrastructure
+* Production deployment using Nginx and HTTPS
 
 ---
 
@@ -602,6 +524,7 @@ fastapi
 sqlalchemy
 aiomysql
 uvicorn
+gunicorn
 pydantic
 python-jose
 passlib
@@ -617,14 +540,15 @@ docker
 
 # 📌 Future Improvements
 
-- ⚛️ React frontend migration
-- 📊 Admin analytics dashboard
-- 📧 Email notifications
-- ☁️ Cloud deployment
-- 🔄 Refresh tokens
-- 📈 Prometheus + Grafana monitoring
-- 🧠 Redis caching
-- 🔔 WebSocket notifications
+* React frontend migration
+* Admin analytics dashboard
+* Email notifications
+* Refresh tokens
+* Redis caching
+* Prometheus + Grafana monitoring
+* Background task queue
+* Database replication
+* Horizontal scaling
 
 ---
 
