@@ -25,6 +25,9 @@ The project includes a lightweight frontend dashboard built with **HTML/CSS/Java
 
 ---
 
+🌐 Live Demo
+Frontend: https://ums.dhruvcore.com/
+
 # 🌐 Frontend Dashboard
 
 A simple frontend dashboard is included using:
