@@ -4,6 +4,7 @@ A full-stack **University Management System** built with **FastAPI**, **MySQL**,
 
 The project includes a lightweight frontend dashboard built with **HTML/CSS/JavaScript** for testing and interacting with the API.
 
+
 ---
 
 # 🚀 Features
