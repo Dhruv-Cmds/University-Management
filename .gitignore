@@ -187,3 +187,4 @@ docker/mysql-data/
 *.pid
 *.log
 docker/databases/
+docker-compose.override.yml
