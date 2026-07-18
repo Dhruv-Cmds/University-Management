@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>University Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/messages.css">
+</head>
+
+<body>
+
+    <header>
+
+        <nav>
+
+            <div class="warp">
+                
+                    <div class="header-name">University Dashboard</div>
+
+                    <div class="link">
+
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#FAQ">FAQ</a></li>
+                            <li><a href="#contectus">Contect Us</a></li>
+                        </ul>
+
+                    </div>
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section id="hero">
+
+            <div class="warp">
+
+                <div class="prefrence">What would you like to Create ?</div>
+
+                <div class="hero-links">
+
+                    <div class="student"><a href="#students">Student</a></div>
+                    <div class="faculty"><a href="#faculty">Faculty</a></div>
+                    <div class="course"><a href="#course">Course</a></div>
+                    <div class="enrollment"><a href="#enrollment">Enrollment</a></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="students">
+
+            <div class="warp">
+
+                <div class="student-title"> Create Student</div>
+
+                <div class="student-box">
+                    
+                    <div class="student-details">
+                        <input id="student-name" type="text" placeholder="Name">
+                        <input id="student-email" type="email" placeholder="Email">
+                        <input id="student-phone-number" type="number" placeholder="Phone Number">
+
+                    </div>
+
+                    <div class="student-btn">
+
+                        <select id="student-gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+
+                        <button id="createStudentBtn" type="button">Create Student</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section id="faculty">
+
+            <div class="warp">
+
+                <div class="faculty-title"> Create Faculty</div>
+
+                <div class="faculty-box">
+                    
+                    <div class="faculty-details">
+                        
+                        <input id="faculty-name" type="text" placeholder="Name">
+                        <input id="faculty-email" type="email" placeholder="Email">
+                        <input id="faculty-phone-number" type="number" placeholder="Phone Number">
+
+                    </div>
+
+                    <div class="faculty-btn">
+
+                        <select id="faculty-gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+
+                        <button id="createFacultyBtn" type="button">Create Faculty</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section id="course">
+
+            <div class="warp">
+
+                <div class="course-title"> Create Course</div>
+
+                <div class="course-box">
+
+                    <div class="course-details">
+
+                        <input id="course-name" type="text" placeholder="Course Name">
+
+                    </div>
+                    
+                    <div class="faculty-btn">
+                        <button id="createCourseBtn" type="button">Create Course</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="enrollment">
+            <div class="warp">
+                <div class="course-title">Create Enrollment</div>
+                <div class="course-box">
+                    <div class="course-details">
+                        <input id="enrollment-student-id" type="number" min="1" placeholder="Student ID">
+                        <input id="enrollment-course-id" type="number" min="1" placeholder="Course ID">
+                    </div>
+                    <div class="faculty-btn">
+                        <button id="enrollBtn" type="button">Create Enrollment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+    </main>
+
+    <script src="../app.js"></script>
+    <p id="message" class="message" hidden aria-live="polite"></p>
+</body>
+</html>

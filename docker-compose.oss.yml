@@ -1,0 +1,40 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${"MYSQL_ROOT_PASSWORD"}
+      MYSQL_DATABASE: ${"DB_NAME"}
+      MYSQL_USER: ${"DB_USER"}
+      MYSQL_PASSWORD: ${"DB_PASSWORD"}
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+    
+  redis:
+    image: redis:7-alphine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  ums-api:
+    container_name: ums-api
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "8002:8000"
+    volumes:
+      - .:/app:Z
+    env_file:
+      - ./.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+    networks:
+      - shared-network
+
+networks:
+  mysql-data:
+  redis-data:

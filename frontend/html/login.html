@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>University Auth</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/messages.css">
+</head>
+<body>
+        <div class="container">
+            <div class="box1">
+                <h2>Login please</h2>
+                
+                <input type="email" 
+                       id="email" 
+                       class="input-colums"
+                       placeholder="Enter your email"
+                       required>
+                
+                <input type="password"
+                       id="password"
+                       class="input-colums"
+                       placeholder="Enter your password"
+                       required>
+                
+                <select id="role" class="input-colums" aria-label="Account role">
+                    <option value="admin">Admin</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+
+                <button id="loginBtn" class="log-in" type="button">LOG IN</button>
+                <p id="message" class="message" hidden aria-live="polite"></p>
+                
+            </div>
+            <div class="box2">
+                <h2>WELCOME!</h2>
+                <p>Enter your details and start journey</p>
+                <button id="signupBtn" class="sign-up" type="button">SIGNUP</button>
+            </div>
+        </div>
+    <script src="../app.js"></script>
+</body>
+</html>
