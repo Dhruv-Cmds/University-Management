@@ -29,5 +29,4 @@ jobs:
             cd /opt/apps/university-management-system
             git fetch origin main
             git reset --hard origin/main
-            cd docker
-            docker compose up -d --build
+            sudo docker restart ums-api || true
