@@ -9,6 +9,7 @@
     <title>University Dashboard</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/messages.css">
+    <link rel="stylesheet" href="../css/footer.css">
 </head>
 
 <body>
@@ -18,19 +19,18 @@
         <nav>
 
             <div class="warp">
-                
-                    <div class="header-name">University Dashboard</div>
 
-                    <div class="link">
+                <div class="header-name">University Dashboard</div>
 
-                        <ul>
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#FAQ">FAQ</a></li>
-                            <li><a href="#contectus">Contect Us</a></li>
-                        </ul>
+                <div class="link">
 
-                    </div>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#FAQ">FAQ</a></li>
+                        <li><a href="#contect">Contect</a></li>
+                    </ul>
+
+                </div>
             </div>
 
         </nav>
@@ -39,7 +39,7 @@
 
     <main>
 
-        <section id="hero">
+        <section id="home">
 
             <div class="warp">
 
@@ -58,115 +58,159 @@
 
         </section>
 
-        <section id="students">
 
-            <div class="warp">
 
-                <div class="student-title"> Create Student</div>
+        <div class="warp-color">
 
-                <div class="student-box">
-                    
-                    <div class="student-details">
-                        <input id="student-name" type="text" placeholder="Name">
-                        <input id="student-email" type="email" placeholder="Email">
-                        <input id="student-phone-number" type="number" placeholder="Phone Number">
+            <section id="students">
 
-                    </div>
+                <div class="warp">
 
-                    <div class="student-btn">
+                    <div class="student-title"> Create Student</div>
 
-                        <select id="student-gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                    <div class="student-box">
 
-                        <button id="createStudentBtn" type="button">Create Student</button>
+                        <div class="student-details">
+                            <input id="student-name" type="text" placeholder="Name">
+                            <input id="student-email" type="email" placeholder="Email">
+                            <input id="student-phone-number" type="number" placeholder="Phone Number">
+
+                        </div>
+
+                        <div class="student-btn">
+
+                            <select id="student-gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+
+                            <button id="createStudentBtn" type="button">Create Student</button>
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <section id="faculty">
+            <section id="faculty">
 
-            <div class="warp">
+                <div class="warp">
 
-                <div class="faculty-title"> Create Faculty</div>
+                    <div class="faculty-title"> Create Faculty</div>
 
-                <div class="faculty-box">
-                    
-                    <div class="faculty-details">
-                        
-                        <input id="faculty-name" type="text" placeholder="Name">
-                        <input id="faculty-email" type="email" placeholder="Email">
-                        <input id="faculty-phone-number" type="number" placeholder="Phone Number">
+                    <div class="faculty-box">
 
-                    </div>
+                        <div class="faculty-details">
 
-                    <div class="faculty-btn">
+                            <input id="faculty-name" type="text" placeholder="Name">
+                            <input id="faculty-email" type="email" placeholder="Email">
+                            <input id="faculty-phone-number" type="number" placeholder="Phone Number">
 
-                        <select id="faculty-gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                        </div>
 
-                        <button id="createFacultyBtn" type="button">Create Faculty</button>
+                        <div class="faculty-btn">
+
+                            <select id="faculty-gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+
+                            <button id="createFacultyBtn" type="button">Create Faculty</button>
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <section id="course">
+            <section id="course">
 
-            <div class="warp">
+                <div class="warp">
 
-                <div class="course-title"> Create Course</div>
+                    <div class="course-title"> Create Course</div>
 
-                <div class="course-box">
+                    <div class="course-box">
 
-                    <div class="course-details">
+                        <div class="course-details">
 
-                        <input id="course-name" type="text" placeholder="Course Name">
+                            <input id="course-name" type="text" placeholder="Course Name">
 
-                    </div>
-                    
-                    <div class="faculty-btn">
-                        <button id="createCourseBtn" type="button">Create Course</button>
+                        </div>
+
+                        <div class="faculty-btn">
+                            <button id="createCourseBtn" type="button">Create Course</button>
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
-        </section>
-
-        <section id="enrollment">
-            <div class="warp">
-                <div class="course-title">Create Enrollment</div>
-                <div class="course-box">
-                    <div class="course-details">
-                        <input id="enrollment-student-id" type="number" min="1" placeholder="Student ID">
-                        <input id="enrollment-course-id" type="number" min="1" placeholder="Course ID">
-                    </div>
-                    <div class="faculty-btn">
-                        <button id="enrollBtn" type="button">Create Enrollment</button>
+            <section id="enrollment">
+                <div class="warp">
+                    <div class="enrollment-title">Create Enrollment</div>
+                    <div class="enrollment-box">
+                        <div class="enrollment-details">
+                            <input id="enrollment-student-id" type="number" min="1" placeholder="Student ID">
+                            <input id="enrollment-course-id" type="number" min="1" placeholder="Course ID">
+                        </div>
+                        <div class="enrollment-btn">
+                            <button id="enrollBtn" type="button">Create Enrollment</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        
+            <div class="border-bottom"></div>
+
+
+        </div>
 
     </main>
+
+    <footer id="contect">
+
+        <div class="warp">
+
+            <div class="about-container">
+
+                <div class="about-links">
+
+                    <div class="about-column">
+                        <h2>Main</h2>
+                        <a href="#home">Home</a>
+                        <a href="../html/about.html" target="_blank">About</a>
+                    </div>
+
+                    <div class="about-column">
+                        <h2>Contect</h2>
+                        <a href="https://dhruvcore.com" target="_blank">Site</a>
+                        <a href="https://github.com/Dhruv-Cmds/" target="_blank">Github</a>
+                        <a href="mailto:pd1900565@gmail.com" class="email-link mono">Email</a>
+                    </div>
+
+                </div>>
+
+            </div>
+
+        </div>
+
+        <div class="border-footer"></div>
+
+        <div class="footer-bottom">
+            <p>© 2026 University Management</p>
+        </div>
+        
+    </footer>
+
 
     <script src="../app.js"></script>
     <p id="message" class="message" hidden aria-live="polite"></p>
 </body>
+
 </html>

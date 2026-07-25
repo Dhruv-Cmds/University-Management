@@ -1,7 +1,12 @@
-// Use the local FastAPI server during development and the reverse-proxied API in production.
-const BASE_URL = window.location.hostname === "ums.dhruvcore.com"
-    ? `${window.location.origin}/api`
-    : "http://127.0.0.1:8000";
+// `window.UMS_API_URL` can be set before this file to override the API location.
+// uses port 8000, so requests fall back to that port if Docker is not running.
+const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+const configuredApiUrl = window.UMS_API_URL?.replace(/\/$/, "");
+const apiUrls = configuredApiUrl
+    ? [configuredApiUrl]
+    : isLocalHost || window.location.protocol === "file:"
+        ? ["http://127.0.0.1:8002"]
+        : [`${window.location.origin}/api`];
 
 let token = localStorage.getItem("ums_access_token") || "";
 let lastStudentId = null;
@@ -16,21 +21,39 @@ function showMessage(text, type = "success") {
     box.hidden = false;
 }
 
-async function request(path, options = {}) {
-    try {
-        const response = await fetch(`${BASE_URL}${path}`, options);
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-            throw new Error(data.detail || "The request could not be completed.");
-        }
-        return data;
-    } catch (error) {
-        if (error instanceof TypeError) {
-            throw new Error("Cannot reach the backend. Start FastAPI and try again.");
-        }
-        throw error;
+function getErrorMessage(detail) {
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+        return detail.map((item) => item.msg || "Invalid input.").join(" ");
     }
+    return "The request could not be completed.";
+}
+
+async function request(path, options = {}) {
+    let networkError;
+
+    for (const apiUrl of apiUrls) {
+        try {
+            const response = await fetch(`${apiUrl}${path}`, options);
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(getErrorMessage(data.detail));
+            }
+            return data;
+        } catch (error) {
+            // Only try the next URL when the server could not be reached. Backend
+            // errors (such as invalid credentials) should be shown immediately.
+            if (!(error instanceof TypeError)) throw error;
+            networkError = error;
+        }
+    }
+
+    throw new Error(
+        networkError
+            ? "Cannot reach the backend. Start FastAPI and try again."
+            : "The request could not be completed."
+    );
 }
 
 function authHeaders() {
@@ -45,6 +68,11 @@ async function signup() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const role = document.getElementById("role").value;
+
+    if (!email || !password) {
+        showMessage("Enter an email address and password to sign up.", "error");
+        return;
+    }
 
     try {
         await request("/admin/signup", {
@@ -62,6 +90,11 @@ async function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
+    if (!email || !password) {
+        showMessage("Enter your email address and password to log in.", "error");
+        return;
+    }
+
     try {
         const data = await request("/admin/login", {
             method: "POST",
@@ -71,7 +104,7 @@ async function login() {
 
         token = data.access_token;
         localStorage.setItem("ums_access_token", token);
-        window.location.href = "dashboard.html";
+        window.location.assign("dashboard.html");
     } catch (error) {
         showMessage(error.message, "error");
     }
@@ -154,6 +187,12 @@ async function enroll() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const isDashboard = window.location.pathname.endsWith("/dashboard.html");
+    if (isDashboard && !token) {
+        window.location.replace("login.html");
+        return;
+    }
+
     document.getElementById("signupBtn")?.addEventListener("click", signup);
     document.getElementById("loginBtn")?.addEventListener("click", login);
     document.getElementById("createStudentBtn")?.addEventListener("click", createStudent);

@@ -1,8 +1,8 @@
-:root{
+:root {
     --nav-font: 'Lato', sans-serif;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,7 +12,7 @@ html {
     scroll-behavior: smooth;
 }
 
-body{
+body {
     background-color: #000000;
 }
 
@@ -21,12 +21,18 @@ body{
     margin: auto;
 }
 
-nav {
-
+header {
     position: sticky;
     top: 0;
     z-index: 1;
+}
 
+.warp-color {
+    background-color: #1d1d1d;
+    padding-top: 40px;
+}
+
+nav {
     background-color: #353535;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgb(129, 129, 129);
@@ -40,6 +46,7 @@ nav .warp {
     height: 40px;
     margin-top: 0;
 }
+
 .header-name {
 
     font-family: var(--nav-font), serif;
@@ -48,7 +55,6 @@ nav .warp {
 
     color: white;
 }
-
 
 .link {
 
@@ -98,7 +104,7 @@ nav .warp {
     justify-content: center;
 
     margin-top: 10px;
-    margin-bottom: 200px;
+    margin-bottom: 100px;
 }
 
 .hero-links a {
@@ -129,7 +135,7 @@ nav .warp {
     height: 200px;
 
     border-radius: 10px;
-    background-color: #353535;
+    background-color: #121212;
 }
 
 .student-title {
@@ -140,56 +146,56 @@ nav .warp {
     font-family: poppins, sans-serif;
     font-size: 30px;
     font-weight: 800;
-    
+
     text-decoration: none;
-    
+
     color: #ffffff;
 }
 
-.student-details input{
-    
+.student-details input {
+
     background: transparent;
-    
+
     border: 2px solid #000000;
     border-radius: 7px;
-    
+
     margin: 0 20px;
     padding: 10px 50px;
     text-align: center;
-    
+
     font-weight: 400;
     font-size: 20px;
     font-family: var(--nav-font), serif;
-    
+
     color: #ffffff;
 
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .student-details input:hover {
-    
+
     border: none;
     box-shadow: 0 0 30px rgb(128 52 216);
-    
+
     background-color: #d5d5d5;
     color: #000000;
 
     font-family: var(--nav-font), serif;
     font-weight: 600;
-    
+
     transform: translateY(-3px) scale(1.1);
     transition: 300ms;
 }
- 
+
 .student-btn {
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     margin-top: 40px;
     gap: 50px;
-    
+
 }
 
 .student-btn button {
@@ -205,14 +211,14 @@ nav .warp {
     font-weight: 400;
     font-size: 19px;
     font-family: var(--nav-font), serif;
-    
+
     color: #7c7c7c;
 
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .student-btn button:hover {
-    
+
     border: none;
     box-shadow: 0 0 30px rgb(128 52 216);
 
@@ -226,26 +232,26 @@ nav .warp {
     transition: 300ms;
 }
 
-#student-gender{
-    
+#student-gender {
+
     padding: 10px 20px;
     text-align: center;
-    
+
     border: 2px solid #000000;
     border-radius: 4px;
-    
+
     background-color: transparent;
 
     font-weight: 400;
     font-size: 20px;
     font-family: var(--nav-font), serif;
-    
+
     color: #7c7c7c;
 
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#student-gender:hover{
+#student-gender:hover {
 
     border: none;
     box-shadow: 0 0 30px rgb(128 52 216);
@@ -274,7 +280,7 @@ nav .warp {
     font-weight: 800;
 
     text-decoration: none;
-    
+
     margin-top: 100px;
     color: #ffffff;
 }
@@ -291,10 +297,10 @@ nav .warp {
     height: 200px;
 
     border-radius: 10px;
-    background-color: #353535;
+    background-color: #121212;
 }
 
-.faculty-details input{
+.faculty-details input {
 
     background: transparent;
 
@@ -374,7 +380,7 @@ nav .warp {
     transition: 300ms;
 }
 
-#faculty-gender{
+#faculty-gender {
 
     padding: 10px 20px;
     text-align: center;
@@ -393,7 +399,7 @@ nav .warp {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#faculty-gender:hover{
+#faculty-gender:hover {
 
     border: none;
     box-shadow: 0 0 30px rgb(128 52 216);
@@ -439,10 +445,10 @@ nav .warp {
     height: 200px;
 
     border-radius: 10px;
-    background-color: #353535;
+    background-color: #121212;
 }
 
-.course-details input{
+.course-details input {
 
     background: transparent;
 
@@ -522,7 +528,7 @@ nav .warp {
     transition: 300ms;
 }
 
-#course-gender{
+#course-gender {
 
     padding: 10px 20px;
     text-align: center;
@@ -541,7 +547,122 @@ nav .warp {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#course-gender:hover{
+#course-gender:hover {
+
+    border: none;
+    box-shadow: 0 0 30px rgb(128 52 216);
+
+    background-color: #d5d5d5;
+    color: #000000;
+
+    font-family: var(--nav-font), serif;
+    font-weight: 600;
+
+    transform: translateY(-3px) scale(1.1);
+    transition: 300ms;
+}
+
+
+
+/*-------------------------------------------------------------------------------------*/
+
+
+.enrollment-title {
+
+    display: flex;
+    justify-content: center;
+
+    font-family: poppins, sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    margin-top: 100px;
+    color: #ffffff;
+}
+
+.enrollment-box {
+
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 200px;
+
+    border-radius: 10px;
+    background-color: #121212;
+}
+
+.enrollment-details input {
+
+    background: transparent;
+
+    border: 2px solid #000000;
+    border-radius: 7px;
+
+    margin: 0 20px;
+    padding: 10px 50px;
+    text-align: center;
+
+    font-weight: 400;
+    font-size: 20px;
+    font-family: var(--nav-font), serif;
+
+    color: #ffffff;
+
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.enrollment-details input:hover {
+
+    border: none;
+    box-shadow: 0 0 30px rgb(128 52 216);
+
+    background-color: #d5d5d5;
+    color: #000000;
+
+    font-family: var(--nav-font), serif;
+    font-weight: 600;
+
+    transform: translateY(-3px) scale(1.1);
+    transition: 300ms;
+}
+
+.enrollment-btn {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 40px;
+    gap: 50px;
+
+}
+
+.enrollment-btn button {
+
+    padding: 10px 8px;
+    text-align: center;
+
+    border: 2px solid #000000;
+    border-radius: 4px;
+
+    background-color: transparent;
+
+    font-weight: 400;
+    font-size: 19px;
+    font-family: var(--nav-font), serif;
+
+    color: #7c7c7c;
+
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.enrollment-btn button:hover {
 
     border: none;
     box-shadow: 0 0 30px rgb(128 52 216);

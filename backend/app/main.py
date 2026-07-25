@@ -13,12 +13,27 @@ from app.db import engine, Base
 from app.core import limiter
 from app.api.routes import auth, courses, enrollments, faculty
 
+import asyncio
+from sqlalchemy.exc import OperationalError
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+
+    for attempt in range(15):
+        try:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+                
+            break
+
+        except OperationalError as e:
+            print(f"Waiting for DB... ({attempt + 1}/15)")
+            await asyncio.sleep(2)
+            raise e
+
     yield
+
 
 
 app = FastAPI(
