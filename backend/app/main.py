@@ -73,7 +73,6 @@ app = FastAPI(
 
 app.state.limiter = limiter
 
-# app.add_middleware(SlowAPIMiddleware)
 import os
 
 if os.getenv("TESTING") != "true":
